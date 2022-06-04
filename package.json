@@ -4,8 +4,26 @@
   "description": "此軟體僅有Riot合法的功能 - 未來會出 手機連線電腦版(免費與付費贊助免廣告版本)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "Config-build-win": "electron-builder --config electron-builder-win.json",
+    "Config-release-win": "electron-builder --config electron-builder-win.json --publish always"
   },
-  "author": "Mjolnir Team - yomisana",
-  "license": "MPL"
+  "author": "yomisana",
+  "license": "MPL",
+  "private": true,
+  "devDependencies": {
+    "electron": "^19.0.1",
+    "electron-builder": "^22.14.13"
+  },
+  "dependencies": {
+    "asarmor": "^2.0.0",
+    "electron-log": "^4.4.7",
+    "electron-updater": "^4.6.5",
+    "find-process": "^1.4.7",
+    "fs-extra": "^10.1.0",
+    "hi-base64": "^0.2.1",
+    "path": "^0.12.7",
+    "reinterval": "^1.1.0",
+    "request": "^2.88.2",
+    "sudo-prompt": "^9.2.1"
+  }
 }
