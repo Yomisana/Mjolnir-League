@@ -1,0 +1,11 @@
+{
+  "name": "mjolnir-league",
+  "version": "1.0.0",
+  "description": "此軟體僅有Riot合法的功能 - 未來會出 手機連線電腦版(免費與付費贊助免廣告版本)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mjolnir Team - yomisana",
+  "license": "MPL"
+}
