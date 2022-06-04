@@ -1,2 +1,6 @@
+build
 dist
+asarmor.js
+build-win.json
+package-lock.json
 node_modules

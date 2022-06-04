@@ -24,6 +24,10 @@
 # MPL授權
 作者的話: 此軟體會開源是為了我小小的心願，希望各位可以多多點個星星，如果有建議的或是錯誤回報可以到 [Discord](https://discord.gg/RmB9vXukbq) 回覆
 - 此軟體如果你有創建屬於你自己的版本請記得著名作者我拜託了! :P
+# 如何使用
+- 請先 npm i 你也可以打 npm install
+- 在寫一個屬於你自己的打包參數
+- 準備你的 logo 等檔案 放置在 build
 # 軟體名稱
 軟體隸屬於 Mjolnir 底下  
 Mjolnir League 軟體開發者為: [yomisana(優米撒那) | 主要開發者](https://dev.yomisana.xyz)
