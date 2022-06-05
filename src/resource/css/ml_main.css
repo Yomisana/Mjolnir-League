@@ -1,0 +1,54 @@
+.button {
+    background-color: #282828;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    /*text-decoration: none;*/
+    font-size: 16px;
+    /*margin: 4px 2px;*/
+    cursor: pointer;
+    display: block;
+    /*margin: 0px auto;
+    transition: background 0.150s;*/
+}
+/* 間格 18 %*/
+.main-wrapper {
+    height: 40px;
+    width: 150px; 
+    /*box-sizing: border-box;*/
+    background-color: #282828;
+    backdrop-filter: blur(4px);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    position: absolute;
+    left: 10%;
+    top: 92%;
+    transform: translate(-50%, -50%);
+}
+.clean-wrapper {
+    height: 40px;
+    width: 150px; 
+    /*box-sizing: border-box;*/
+    background-color: #282828;
+    backdrop-filter: blur(4px);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    position: absolute;
+    left: 28%;
+    top: 92%;
+    transform: translate(-50%, -50%);
+}
+.kill_lolrender-wrapper{
+    height: 40px;
+    width: 150px; 
+    /*box-sizing: border-box;*/
+    background-color: #282828;
+    backdrop-filter: blur(4px);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    position: absolute;
+    left: 46%;
+    top: 92%;
+    transform: translate(-50%, -50%);
+}

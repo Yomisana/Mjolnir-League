@@ -42,7 +42,8 @@ const $ = { // 已完成不需要變更
             }
           }
         ]);
-        taskbar_tray.setToolTip(`Mjolnir League v.${version}`);
+        //taskbar_tray.setToolTip(`Mjolnir League v.${version}`);
+        taskbar_tray.setToolTip(`Mjolnir League`);
         taskbar_tray.setContextMenu(contextMenu);
 
         taskbar_tray.on('click', () => {
@@ -85,6 +86,7 @@ ipcMain.on("toMain", async (event, args) => {
     }
 });
 */
+
 app.whenReady().then(() => {
     locate = app.getLocale();
     software_version = `${version}`;
@@ -214,8 +216,8 @@ else{
 }
 
 // log
-if(!fs.existsSync(path.join(main_dir, '../logger')))
-    fs.mkdirSync(path.join(main_dir, '../logger'),{ recursive: true });
+if(!fs.existsSync(path.join(log_dir)))
+    fs.mkdirSync(path.join(log_dir),{ recursive: true });
 
 // autoUpdater
 autoUpdater.logger = electronLogger;
@@ -257,8 +259,8 @@ autoUpdater.on('checking-for-update', () => {
   })
 
   autoUpdater.on('update-downloaded', (info) => {
-    console.log('[INFO] Restarting League Helper then Installing update.');
-    ml_splash.webContents.send('update_status','Restarting League Helper Installing update...');
+    console.log('[INFO] Restarting  Mjolnir League then Installing update.');
+    ml_splash.webContents.send('update_status','Restarting Mjolnir League Installing update...');
   });
 
   // 更新檔下載完畢後 過 x 秒 關閉軟體更新後重啟軟體

@@ -1,4 +1,5 @@
 build
+json
 dist
 asarmor.js
 build-win.json
