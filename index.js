@@ -14,6 +14,14 @@ const exec = require('child_process').exec;
 let isQuiting;
 
 const $ = { // 已完成不需要變更
+    closeApp: function(){
+      if(pid){
+          process.kill(pid);
+          pid = 0;
+      }
+      app.quit();
+      process.exit(1);
+    },
     taskbar: async function(win){
         let type = (process.platform == "darwin")?'png':'ico';
 
@@ -38,7 +46,7 @@ const $ = { // 已完成不需要變更
           },
           {
             label: 'Quit Mjolnir League', click: function () {
-                is_app_close = true;
+              $.closeApp();  
             }
           }
         ]);
@@ -140,11 +148,11 @@ app.whenReady().then(() => {
         title: main_set.title,
         icon: window_icon,
         autoHideMenuBar: true,
-        resizable: false,
+        //resizable: false,
         backgroundColor: window_BackgroundColor,
         width: main_set.width, height: main_set.height,
         minWidth: main_set.min_width, minHeigh: main_set.min_width,
-        maxWidth: main_set.max_width, maxHeight: main_set.max_height,
+        //maxWidth: main_set.max_width, maxHeight: main_set.max_height,
         titleBarStyle: 'hiddenInset',
         frame: true,
         show: false,
@@ -186,12 +194,13 @@ app.whenReady().then(() => {
         }
     });
 
+    /*
     // 防止視窗超出大小或過小
     ml_main.on('resize', () => {
         let size = ml_main.getSize();
         if(size[0] != main_set.width || size[1] != main_set.height)
         ml_main.setSize(main_set.width,main_set.height);
-    });
+    });*/
 });
 
 // 額外設定

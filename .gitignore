@@ -1,3 +1,4 @@
+backup
 build
 json
 dist
@@ -5,3 +6,6 @@ asarmor.js
 build-win.json
 package-lock.json
 node_modules
+
+src/core/backup
+src/tmp

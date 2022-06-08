@@ -4,17 +4,14 @@ const path = require('path');
 
 /*
  *  全區域變數
- *
- * 
- *
  */
 
 // electron
-global.taskbar_tray = null;
-global.is_app_close = false; 
+//global.permission = false;
+global.taskbar_tray = null; // Windows tray
 global.locate = null; // Window locate
 global.pid = 0; // Mjolnir League本身的 PID
-global.software_version = "";
+global.software_version = ""; // Auto
 global.software_name = "Mjolnir League"
 global.main_dir = process.env.APPDATA + '\\.Mjolnir-League\\bin';
 global.log_dir = process.env.APPDATA + '\\.Mjolnir-League\\logger';
@@ -45,34 +42,33 @@ global.log_dir = process.env.APPDATA + '\\.Mjolnir-League\\logger';
             title: software_name
         }
 
-// core index.js
-global.refresh_first_timer = 1000;
-global.refresh_second_timer = 1000;
-global.second_timer_close = false;
-global.now_time = "";
-global.tmp_date_time ={
-    time_HH: null,
-    time_MM: null,
-    time_SS: null,
-}
-
-// LOL 需要的參數
-global.permission = false;
-global.game_is_found = false;
-global.game_is_notfound = false;
-    // LOL Path
-    global.game_path = null;
-    global.game_dir = null;
-    // LOL DATA
-    global.lockfile ={
-        lockfile_name: "",
-        lockfile_pid: "",
-        lockfile_port: "",
+// game setting
+global.refresh_check_path_timer = { // check lol client path timer
+    open: 1,
+    close: 5,
+} 
+    // client found?
+    global.client_is_found = false; // main
+    global.client_is_notfound = false;
+    // game  found?
+    global.game_is_found = false; // main
+    global.game_is_notfound = false;
+    // client path
+    global.client_path = null; // ..LeagueClient\LeagueClient.exe
+    global.client_dir = null; // ..LeagueClient\
+    // client api
+    global.is_lockfile_get = false;
+    global.lockfile_str = null;
+    global.lockfile = null;
+    global.client_lockfile = {
+        lockfile_name: null,
+        lockfile_pid: null,
+        lockfile_port: null,
         lockfile_token: "",
-        lockfile_method: ""
+        lockfile_method: null,
     }
-    global.game_lockfile = null;
     global.url_prefix = null;
+    // summoner data
     global.me = {
         summoner_status: null, // availability: online:chat | afk:away | Matchmaking: dnd"
         summoner_icon: 0,
@@ -114,10 +110,38 @@ global.game_is_notfound = false;
         statusMessage: null,
         summonerId: null,
     }
-    global.gameflow = null,
-    //global.url_headers = null;
-        // LOL tmp DATA
-        global.lockfile_tmp_str = null;
+    /*
+     * None
+     * Lobby
+     * Matchmaking
+     * ReadyCheck
+     * ChampSelect
+     * InProgress
+     * Reconnect
+     * PreEndOfGame
+     * EndOfGame
+     * 
+     */
+    global.gameflow = null;
+    global.gameflow_ReadyCheck = false;
+    global.gameflow_ChampSelect = false;
+    global.conversations_id_get = false;
+    global.conversations = {
+        id: "",
+        
+    }
+    global.postMessage = {
+                // 0     1    2    3     4    5      6    7      8      9     10     11
+        message: ["top","jg","ap","ad","sup","mid","adc","上路","打野","中路","下路","輔助"],
+        times: 2,
+        traget: 0,
+        is_system_chat: false,
+        type: ["chat","celebration"]
+    }
+
+
+
+
 
 
 // Logger
@@ -139,7 +163,7 @@ global.nowtimes = function(flags){
 
 const startTime = nowtimes(true);
 
-electronLogger.transports.file.resolvePath = () => path.join(main_dir, `../logger/process-${startTime}.log`);
+electronLogger.transports.file.resolvePath = () => path.join(log_dir, `/process-${startTime}.log`);
 global.console.log = function(...raw) {
     let ex = new Error().stack.split('\n')[2].trim().split(' ');
     let out = path.parse(ex[ex.length-1].replace('(','').replace(')',''));
