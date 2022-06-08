@@ -81,11 +81,11 @@ const $ = {
                         ml_main.webContents.send("game_status", gameflow + " | 對戰正在自動接受中...");
                         console.log("[INFO] 傳送自動接受資訊中...");
                         gameflow_ReadyCheck = true;
-                        gameflow_ChampSelect = true;
+                        gameflow_ChampSelect = false;
                     }else if(gameflow == "ChampSelect"){
                         gameflow_ReadyCheck = false;
-                        gameflow_ChampSelect = true;
                         if(me.lol.gameQueueType == "NORMAL"){
+                            gameflow_ChampSelect = true;
                             ml_main.webContents.send("game_status", gameflow + " | 一般盲選 選擇英雄腳色中");
                         }else if(me.lol.gameQueueType == "RANKED_SOLO_5x5"){
                             ml_main.webContents.send("game_status", gameflow + " | 單雙積分 選擇英雄腳色中");
@@ -108,6 +108,7 @@ const $ = {
                         }else if(me.lol.gameQueueType == "BOT"){
                             ml_main.webContents.send("game_status", gameflow + " | 玩家打電腦 選擇英雄腳色中");
                         }else if(me.lol.gameQueueType == "PRACTICETOOL"){
+                            gameflow_ChampSelect = true;
                             ml_main.webContents.send("game_status", gameflow + " | 練習工具 選擇英雄腳色中");
                         }else{
                             ml_main.webContents.send("game_status", gameflow + " | 你目前正在選擇英雄腳色中?? 這...你辦不到的!!如果可以教我拜託了!!不可能是BUG真的!!");
@@ -145,7 +146,6 @@ const $ = {
 
 
 var get_summoner_data = reInterval(function(){
-    //console.log("[INFO - get gameflow] 擷取完畢");
     $.get_status();
     if(gameflow_ReadyCheck){
         $.post_accept();
@@ -153,4 +153,4 @@ var get_summoner_data = reInterval(function(){
     if(gameflow_ChampSelect){
         require('./post_message');
     }
-}, 1000) // default timer 3600000 1 hr
+}, 1000)

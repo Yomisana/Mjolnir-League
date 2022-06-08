@@ -60,11 +60,9 @@ const $ = {
         );
     }
 }
-//console.log("[INFO - get summoner data] 我有一直被呼叫嗎?");
 
 
 var get_summoner_data = reInterval(function(){
-    //console.log("[INFO - get summoner data] 擷取完畢");
     $.get_summoner_data();
     require('./get_gameflow');
 }, 1000) // default timer 3600000 1 hr

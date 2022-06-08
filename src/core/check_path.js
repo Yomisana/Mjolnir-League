@@ -121,5 +121,3 @@ var check_timer = reInterval(function(){
         $.is_lol_client_open(); // client
     }
 }, 1000) // default timer is not change default timer is dynamic
-
-//console.log("我有偷跑");
