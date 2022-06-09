@@ -206,13 +206,13 @@ app.whenReady().then(() => {
 // 程式所有視窗確定關閉後關閉現程
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        is_app_close = true;
+      $.closeApp();
     }
 });
 
 // 單一處理程序鎖定，有兩個以上的處理程序時，強制關閉最後開啟的那個
 if(!instanceLock)
-    is_app_close = true;
+  $.closeApp();
 else{
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     // 如果啟動第二個處理程序，則將原先啟動的那個彈出來並聚焦
@@ -256,7 +256,7 @@ autoUpdater.on('checking-for-update', () => {
   autoUpdater.on('error', (err) => {
     console.warn('[WARN] Error in auto-updater. ' + err);
     ml_splash.webContents.send('update_status','Update error');
-    is_app_close = true;
+    $.closeApp();
   })
 
   autoUpdater.on('download-progress', (progressObj) => {
@@ -274,7 +274,7 @@ autoUpdater.on('checking-for-update', () => {
   // 更新檔下載完畢後 過 x 秒 關閉軟體更新後重啟軟體
   autoUpdater.on('update-downloaded', (ev, info) => {
     setTimeout(function() {
-        is_app_close = true;
+        $.closeApp();
         autoUpdater.quitAndInstall();
     }, 3000)
   })
