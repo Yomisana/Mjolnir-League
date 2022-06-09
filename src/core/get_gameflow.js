@@ -1,5 +1,6 @@
 'use strict';
 require('./global');
+require('./post_message');
 
 const request = require('request');
 var reInterval = require('reinterval');
@@ -17,10 +18,14 @@ const $ = {
                 try{
                     gameflow = body.replace(/[^A-Z0-9]/ig,"");
                     if(gameflow == "None"){
-                        gameflow_ChampSelect = false;
+                        gameflow_ChampSelect = false;conversations_id_get = false;
+                        gameflow_ChampSelectSpoken = false;
+                        conversations_id = null;
                         ml_main.webContents.send("game_status", gameflow + " | 你目前可能在首頁或是選擇模式大廳");
                     }else if(gameflow == "Lobby"){
-                        gameflow_ChampSelect = false;
+                        gameflow_ChampSelect = false;conversations_id_get = false;
+                        gameflow_ChampSelectSpoken = false;
+                        conversations_id = null;
                         if(me.lol.gameQueueType == "NORMAL"){
                             ml_main.webContents.send("game_status", gameflow + " | 一般盲選對戰房間");
                         }else if(me.lol.gameQueueType == "RANKED_SOLO_5x5"){
@@ -46,7 +51,7 @@ const $ = {
                         }else if(me.lol.gameQueueType == "PRACTICETOOL"){
                             ml_main.webContents.send("game_status", gameflow + " | 練習工具對戰房間");
                         }else{
-                            ml_main.webContents.send("game_status", gameflow + " | Waiting Play...");
+                            ml_main.webContents.send("game_status", gameflow + " | 約德爾人把伺服器用炸了，導致本來就有的對戰房間變不見了(伺服器BUG了 QQ)");
                         }
                     }else if(gameflow == "Matchmaking"){
                         gameflow_ReadyCheck = false;
@@ -75,17 +80,20 @@ const $ = {
                         }else if(me.lol.gameQueueType == "PRACTICETOOL"){
                             ml_main.webContents.send("game_status", gameflow + " | 匹配練習工具");
                         }else{
-                            ml_main.webContents.send("game_status", gameflow + " | 你目前在匹配列隊中?? 這...你辦不到的!!如果可以教我拜託了!!不可能是BUG真的!!");
+                            ml_main.webContents.send("game_status", gameflow + " | 你目前在匹配未知列隊中?? 這...你辦不到的!! 伺服器是不是炸了");
                         }
                     }else if(gameflow == "ReadyCheck"){ // 自動接受
                         ml_main.webContents.send("game_status", gameflow + " | 對戰正在自動接受中...");
                         console.log("[INFO] 傳送自動接受資訊中...");
                         gameflow_ReadyCheck = true;
-                        gameflow_ChampSelect = false;
+                        gameflow_ChampSelect = false;conversations_id_get = false;
+                        gameflow_ChampSelectSpoken = false;
+                        conversations_id = null;
                     }else if(gameflow == "ChampSelect"){
                         gameflow_ReadyCheck = false;
                         if(me.lol.gameQueueType == "NORMAL"){
                             gameflow_ChampSelect = true;
+                            gameflow_ChampSelectSpoken = true;
                             ml_main.webContents.send("game_status", gameflow + " | 一般盲選 選擇英雄腳色中");
                         }else if(me.lol.gameQueueType == "RANKED_SOLO_5x5"){
                             ml_main.webContents.send("game_status", gameflow + " | 單雙積分 選擇英雄腳色中");
@@ -109,12 +117,14 @@ const $ = {
                             ml_main.webContents.send("game_status", gameflow + " | 玩家打電腦 選擇英雄腳色中");
                         }else if(me.lol.gameQueueType == "PRACTICETOOL"){
                             gameflow_ChampSelect = true;
+                            gameflow_ChampSelectSpoken = true;
                             ml_main.webContents.send("game_status", gameflow + " | 練習工具 選擇英雄腳色中");
                         }else{
-                            ml_main.webContents.send("game_status", gameflow + " | 你目前正在選擇英雄腳色中?? 這...你辦不到的!!如果可以教我拜託了!!不可能是BUG真的!!");
+                            ml_main.webContents.send("game_status", gameflow + " | 你目前正在普羅找不到的地方選擇英雄腳色中?? 這...你辦不到的!! 伺服器是不是炸了?");
                         }
                     }else if(gameflow == "InProgress"){
-                        gameflow_ChampSelect = false;
+                        gameflow_ChampSelect = false;conversations_id_get = false;
+                        conversations_id = null;gameflow_ChampSelectSpoken = false;
                         ml_main.webContents.send("game_status", gameflow + " | 遊玩中...");
                     }else if(gameflow == "Reconnect"){
                         ml_main.webContents.send("game_status", gameflow + " | 遊戲還在進行中...請盡快連接回去!");
@@ -126,7 +136,9 @@ const $ = {
                 }catch(error){
                     console.error("[ERROR - get_status] "+err);
                     console.error("[ERROR - get_status] "+error);
-                    game_is_found = false;game_is_notfound = true;gameflow_ReadyCheck = false;gameflow_ChampSelect = false;
+                    game_is_found = false;game_is_notfound = true;gameflow_ReadyCheck = false;
+                    gameflow_ChampSelect = false;conversations_id_get = false;
+                    conversations_id = null;gameflow_ChampSelectSpoken = false;
                 }
             }
         );
@@ -148,9 +160,13 @@ const $ = {
 var get_summoner_data = reInterval(function(){
     $.get_status();
     if(gameflow_ReadyCheck){
-        $.post_accept();
+        //$.post_accept();
     }
-    if(gameflow_ChampSelect){
+    /*if(gameflow_ChampSelect){
+        console.warn("[DEBUG - post msg] 被呼叫了!")
         require('./post_message');
-    }
+    }*/
+    console.log("[DEBUG - 選角了嗎?]" + gameflow_ChampSelect)
+    console.log("[DEBUG - ID拿到了嗎?]" + conversations_id);
+    console.log("[DEBUG - ID是否真的拿到了?]" + conversations_id_get + "\n");
 }, 1000)

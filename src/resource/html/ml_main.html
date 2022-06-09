@@ -5,27 +5,106 @@
         <meta charset="UTF-8">
         <title>Mjolnir League</title>
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-        <link href="../css/lh_main.css" rel="stylesheet" type="text/css">
+        <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
-	    <script src="../plugin/render.js"></script>
+	      <script src="../plugin/render.js"></script>
+
+        <!-- Google Icons -->
+        <link rel="stylesheet" href="../css/google_icons.css">
+        <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
     </head>
     <body>
         <!-- the content goes here -->
-        <div class="text_status">
+        <div class="sidebar">
+          <div class="logo_content">
+            <div class="logo">
+              <!-- i calss = xxx logo icon -->
+              <img id="local_logo" src="../img/ml-logo.png" alt="image error">
+              <div class="logo_name">Mjolnir League</div>
+            </div>
+            <i class="material-icons" id="menu_btn">menu</i>
+          </div>
+          <ul class="nav_list">
+            <!-- 首頁 -->
+            <li>
+              <a href="#">
+                <i class="material-icons">home</i>
+                <span class="sidebar_links_name">Home</span>
+              </a>
+              <span class="tooltip">首頁</span>
+            </li>
+            <!-- 召喚師資訊 -->
+            <li>
+              <a href="#">
+                <i class="material-icons">person</i>
+                <span class="sidebar_links_name">Summoner INFO</span>
+              </a>
+              <span class="tooltip">召喚師資訊</span>
+            </li>
+            <!-- 聊天訊息 -->
+            <li>
+              <a href="#">
+                <i class="material-icons">chat</i>
+                <span class="sidebar_links_name">Chat</span>
+              </a>
+              <span class="tooltip">聊天訊息</span>
+            </li>
+            <!-- 離開 -->
+            <li>
+              <a href="#">
+                <i class="material-icons">exit_to_app</i>
+                <span class="sidebar_links_name">Exit App</span>
+              </a>
+              <span class="tooltip">退出</span>
+            </li>
+          </ul>
+          <!-- Mjolnir League 帳號資訊 -->
+          <div class="profile_content">
+            <div class="profile">
+              <div class="profile_details">
+                <i class="material-icons" id="account_circle">account_circle</i>
+                <!-- <img id="profile_logo" src="../img/account_circle.png" alt="image error"> -->
+                <div class="profile_box">
+                  <div class="name">訪客</div>
+                  <!-- <div class="game_status">尚未連接到LOL</div> -->
+                  <span style="color:white" id="game_is_found">尋找LOL客戶端中...</span>
+                </div>
+              </div>
+              <i class="material-icons" id="settings">settings</i>
+            </div>
+          </div>
+        </div>
+        <!-- body: 頁面內容 -->
+        <div class="body_content">
+          <div class="text">Home</div>
+          <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br>
+          <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br>
+        </div>
+
+        <!-- 讓按鈕有用吧! -->
+        <script type="text/javascript">
+          let menu_btn = document.querySelector("#menu_btn");
+          let sidebar = document.querySelector(".sidebar");
+
+          menu_btn.onclick = function(){
+            sidebar.classList.toggle("active");
+          }
+        </script>
+        <!-- <div class="text_status">
             <span style="color:white;">軟體狀態</span><br>
             <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
             <span style="color:white;">客戶端狀態:</span><span style="color:white" id="game_is_found"></span><br>
-            <!-- <span style="color:white;">現在時間:</span><span style="color:white" id="now_time"></span><br>
-            <span style="color:white;">最後檢查的時間:</span><span style="color:white" id="update_time"></span><br> -->
+            <span style="color:white;">現在時間1:</span><span style="color:white" id="now_time"></span><br>
+            <span style="color:white;">最後檢查的時間1:</span><span style="color:white" id="update_time"></span><br>
             <span style="color:white;">遊戲召喚師資訊</span><br>
             <span style="color:white;">召喚師名稱:</span><span style="color:white" id="summoner_name"></span><br>
             <span style="color:white;">召喚師等級:</span><span style="color:white" id="summoner_level"></span><br>
             <span style="color:white;">召喚師狀態:</span><span style="color:white" id="summoner_status"></span><br>
             <span style="color:white;">召喚師狀態訊息:</span><span style="color:white" id="summoner_status_message"></span><br>
             <span style="color:white;">總專精分數:</span><span style="color:white" id="summoner_masteryScore"></span><br>
-            <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br>
+            
             <span style="color:white;">遊戲狀態</span><br>
-            <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br>
-        </div>
+            
+        </div> -->
     </body>
 </html>

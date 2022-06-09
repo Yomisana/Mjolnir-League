@@ -149,9 +149,9 @@ app.whenReady().then(() => {
         icon: window_icon,
         autoHideMenuBar: true,
         //resizable: false,
-        backgroundColor: window_BackgroundColor,
         width: main_set.width, height: main_set.height,
-        minWidth: main_set.min_width, minHeigh: main_set.min_width,
+        minWidth: main_set.min_width, 
+        minHeight: main_set.min_height,
         //maxWidth: main_set.max_width, maxHeight: main_set.max_height,
         titleBarStyle: 'hiddenInset',
         frame: true,
@@ -194,13 +194,13 @@ app.whenReady().then(() => {
         }
     });
 
-    /*
+    
     // 防止視窗超出大小或過小
     ml_main.on('resize', () => {
         let size = ml_main.getSize();
         if(size[0] != main_set.width || size[1] != main_set.height)
         ml_main.setSize(main_set.width,main_set.height);
-    });*/
+    });
 });
 
 // 額外設定

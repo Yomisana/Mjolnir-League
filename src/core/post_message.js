@@ -3,38 +3,52 @@ require('./global');
 
 const request = require('request');
 var reInterval = require('reinterval');
+var i = 0;
 
 const $ = {
     get_chatid: function(){
 		return new Promise((resolve,reject)=>{
-			request.get({
-				url: url_prefix + '/lol-chat/v1/conversations/',
-				strictSSL: false,
-				headers:{
-					'Accept': 'application/json',
-					'Authorization': client_lockfile.lockfile_token
-				}
-			},
-				function(err, httpResponse, body){
-					if(err) reject(err);
-					
-					var obj = JSON.parse(body);
-					for(let data of obj){
-						if(data.type == "championSelect"){
-							conversations_id_get = true;
-							if(data.lastMessage == null){
-								console.log("[INFO] 成功連線到選角聊天室!");
-							}
-							conversations_id = data.id;
-							resolve(true);
-						}
+			setTimeout(()=>{
+				request.get({
+					url: url_prefix + '/lol-chat/v1/conversations/',
+					strictSSL: false,
+					headers:{
+						'Accept': 'application/json',
+						'Authorization': client_lockfile.lockfile_token
 					}
-				}
-			);
+				},
+					function(err, httpResponse, body){
+						if(err) reject(err);
+						
+						var obj = JSON.parse(body);
+						for(let data of obj){
+							if(data.type == "championSelect"){
+								conversations_id_get = true;
+								if(data.lastMessage == null){
+									console.log("[INFO] 成功連線到選角聊天室!");
+								}
+								else{
+									console.log(`data.lastMessage.fromId: ${data.lastMessage.fromId}`);
+									console.log(`me.id: ${me.id}`);
+									console.log(`data.lastMessage.body: ${data.lastMessage.body}`);
+									console.log(`postMessage.message[0]: ${postMessage.message[0]}`);
+									
+									if(data.lastMessage.fromId == me.id && data.lastMessage.body == postMessage.message[0]) i++;
+								}
+								
+								conversations_id = data.id;
+								resolve(true);
+							}
+						}
+						
+						resolve(false);
+					}
+				);
+			},850);
 		});
         // 提取所有聊天室ID
     },
-    post_message: function(msg,type){
+    post_message: function(msg,type,times){
 		return new Promise((resolve,reject)=>{
 			// 處理 訊息資料
 			const chat_data = {
@@ -62,32 +76,28 @@ const $ = {
 				}
 			);
 		});
-    },
-	waitUntil: async function(cond){
-	  return await new Promise(resolve => {
-		const interval = setInterval(() => {
-		  if (cond == true) {
-			resolve(true);
-			clearInterval(interval);
-		  };
-		}, 1000);
-	  });
-	}
-}
+    }
+};
 
-var timerCond = $.waitUntil($.get_chatid());
-
-var get_chatid = setInterval(async function(){
-	if(timerCond){
-		var msg = postMessage.message[0];
-		var type = postMessage.type[1];
-		var times = postMessage.times;
-
-		for(var i = 1; i < times; i++){
-			console.log("[觸發訊息]" + i);
-			console.log("[觸發訊息]" + times);
-			//await $.post_message(msg,type,times);
-            await $.post_message(msg,type);
+(async function(gb){
+	let k = 0;
+	while(true){
+		k++;
+		let inChat = await $.get_chatid();
+		//console.log('執行第'+k+'次');
+		//console.log('inChat',inChat,',','i',i);
+		if(gb.conversations_id_get && inChat && i <= 2){
+			var msg = gb.postMessage.message[0];
+			var type = gb.postMessage.type[1];
+			var times = gb.postMessage.times;
+			for(var j = 1; j < times; j++){
+				console.log("[觸發訊息]" + j);
+				console.log("[觸發訊息]" + times);
+				await $.post_message(msg,type,times);
+			}
+		}
+		else if(!inChat){
+			i = 1;
 		}
 	}
-}, 1000);
+}(global));

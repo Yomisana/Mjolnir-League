@@ -125,15 +125,15 @@ global.refresh_check_path_timer = { // check lol client path timer
     global.gameflow = null;
     global.gameflow_ReadyCheck = false;
     global.gameflow_ChampSelect = false;
+    global.gameflow_ChampSelectSpoken = false;
     global.conversations_id_get = false;
     global.conversations_id = null;
     global.postMessage = {
                 // 0     1    2    3     4    5      6    7      8      9     10     11
         message: ["top","jg","ap","ad","sup","mid","adc","上路","打野","中路","下路","輔助"],
         times: 2,
-        real_times: 1,
         is_system_chat: false,
-        type: ["chat","celebration"]
+        type: ["celebration","chat"]
     }
 
 
