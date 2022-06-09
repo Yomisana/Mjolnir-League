@@ -61,39 +61,38 @@ const $ = { // 已完成不需要變更
 }
 
 // ipcMain
-/*
+
 ipcMain.on("toMain", async (event, args) => {
     console.log('[ipcMain] ' + args + ' 事件已觸發');
-    if(args == "about_software"){
-      shell.openExternal("https://dev.yomisana.xyz/leaguehelper/");
-      //shell.openExternal("https://github.com/Yomisana/League-Helper/releases/latest");
-    }else if(args == "Clean_log"){
-      fs.readdir(path.join(log_dir), (err, files) => {
-        if (err) {
-          console.error("[ERROR - Clean log] "+err);
-        }
-        // DEBUG
-        //console.log(files);
-        //console.log(path.join(log_dir));
-  
-        for (const file of files) {
-          fs.unlink(path.join(log_dir, file), err => {
-            if (err) {
-              console.error("[ERROR - Ready Clean log] "+err);
-            }
-          });
-        }
-      });
-    }else if(args == "kill_lolrender"){
-      exec('taskkill /f /im LeagueClientUxRender.exe',function (error, stdout, stderr) {
-        //console.log(stdout);
-        console.log("[INFO] 發送結束客戶端渲染畫面程序完畢!");
-        if(error)
-          console.error("[ERROR] " + error);
-      });
+    if(args == "closeapp"){
+      $.closeApp();
     }
+    // }else if(args == "Clean_log"){
+    //   fs.readdir(path.join(log_dir), (err, files) => {
+    //     if (err) {
+    //       console.error("[ERROR - Clean log] "+err);
+    //     }
+    //     // DEBUG
+    //     //console.log(files);
+    //     //console.log(path.join(log_dir));
+  
+    //     for (const file of files) {
+    //       fs.unlink(path.join(log_dir, file), err => {
+    //         if (err) {
+    //           console.error("[ERROR - Ready Clean log] "+err);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }else if(args == "kill_lolrender"){
+    //   exec('taskkill /f /im LeagueClientUxRender.exe',function (error, stdout, stderr) {
+    //     //console.log(stdout);
+    //     console.log("[INFO] 發送結束客戶端渲染畫面程序完畢!");
+    //     if(error)
+    //       console.error("[ERROR] " + error);
+    //   });
+    // }
 });
-*/
 
 app.whenReady().then(() => {
     locate = app.getLocale();
@@ -196,11 +195,11 @@ app.whenReady().then(() => {
 
     
     // 防止視窗超出大小或過小
-    ml_main.on('resize', () => {
-        let size = ml_main.getSize();
-        if(size[0] != main_set.width || size[1] != main_set.height)
-        ml_main.setSize(main_set.width,main_set.height);
-    });
+    // ml_main.on('resize', () => {
+    //     let size = ml_main.getSize();
+    //     if(size[0] != main_set.width || size[1] != main_set.height)
+    //     ml_main.setSize(main_set.width,main_set.height);
+    // });
 });
 
 // 額外設定

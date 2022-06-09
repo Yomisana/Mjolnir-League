@@ -3,8 +3,6 @@ require('./global');
 
 const find = require('find-process');
 const exec = require('child_process').exec;
-var reInterval = require('reinterval');
-
 const fs = require('fs');
 const base64 = require('hi-base64');
 
@@ -20,43 +18,9 @@ const $ = {
                             console.log('[INFO] 找到 LOL 客戶端');
                             console.log('[INFO] 找到 LOL 客戶端(Path):' + client_path);
                             console.log('[INFO] 找到 LOL 客戶端(Dir):' + client_dir + "\n");
-                            ml_main.webContents.send("game_is_found", "找到 LOL 客戶端");
+                            ml_main.webContents.send("client_is_found", client_status[1]);
                             client_is_found = true;
-                            check_timer.reschedule(refresh_check_path_timer.open * 1000);
-                            //require('./get_lockfile');
-
-                            fs.readFile(client_dir + '/lockfile', 'utf8', (err, data) => {
-                                try{
-                                    lockfile_str = data;
-                                    console.log("[INFO] "+ lockfile_str + "\n");
-                                    lockfile = lockfile_str?.split(':');
-                                    // lockfile 
-                                    client_lockfile.lockfile_name =  lockfile[0];
-                                    client_lockfile.lockfile_pid = lockfile[1];
-                                    client_lockfile.lockfile_port = lockfile[2];
-                                    //lockfile.lockfile_token = lockfile[3];
-                                    client_lockfile.lockfile_method = lockfile[4];
-                                    // Token 解密
-                                    var tmp_token = "riot:" + lockfile[3];
-                                    var encode_token = base64.encode(tmp_token);
-                                    client_lockfile.lockfile_token = "Basic " + encode_token
-                                    console.log("[INFO] Token:" + client_lockfile.lockfile_token);
-                        
-                                    console.log("\n",client_lockfile.lockfile_name,"\n",client_lockfile.lockfile_pid,"\n",client_lockfile.lockfile_port,"\n",client_lockfile.lockfile_token,"\n",client_lockfile.lockfile_method,);
-                                    console.log("[INFO] LOL lockfile Done!");
-                        
-                                    url_prefix = client_lockfile.lockfile_method + "://127.0.0.1:" + client_lockfile.lockfile_port;
-                                    console.log("[INFO] Url:" + url_prefix);
-                                    console.log("[INFO] LOL url Done!\n");
-                                    game_is_notfound = false; is_lockfile_get = true;
-                                }catch(error){
-                                    is_lockfile_get = false;
-                                    console.error("[ERROR - lockfile] "+err);
-                                    console.error("[ERROR - lockfile] "+error);
-                                    console.warn("[WARN - lockfile] 請確認是否有使用管理員權限執行，或是確保你的遊戲是否啟動了!" + "\n");
-                                    $.is_lol_client_open();
-                                }
-                            });
+                            $.lockfile();
                         }else{
                             console.log("[INFO - exec] 尚未找到 LOL 客戶端");
                             client_is_found = false;client_is_notfound = false;is_lockfile_get = false;
@@ -66,7 +30,7 @@ const $ = {
             }else{
                 if(client_is_notfound == false){
                     console.log('[INFO] 尚未找到 LOL 客戶端' + "\n");
-                    ml_main.webContents.send("game_is_found", "尚未找到 LOL 客戶端");
+                    ml_main.webContents.send("client_is_found", client_status[0]);
                     // summoner
                     ml_main.webContents.send("summoner_name", "Waiting...");
                     ml_main.webContents.send("summoner_level", "Waiting...");
@@ -77,7 +41,6 @@ const $ = {
                     // game status
                     ml_main.webContents.send("game_status", "Waiting...");
                     client_is_found = false;client_is_notfound = true;is_lockfile_get = false;
-                    check_timer.reschedule(refresh_check_path_timer.close * 1000)
                     console.log("[INFO] Clean Data");
                     client_path = null;
                     client_dir = null
@@ -88,12 +51,52 @@ const $ = {
                     client_lockfile.lockfile_token = "";
                     client_lockfile.lockfile_method = null;
                     url_prefix = null;
+                    me.summoner_status = null;me.summoner_icon = 0;me.id = null;
+                    me.lol.gameQueueType = "";me.lol.level = "";me.lol.masteryScore = "";
+                    me.lol.timeStamp = ""; me.name = ""; me.pid = null;
+                    me.platformId = null;me.puuid = null;me.statusMessage = null;
+                    me.summonerId = null;gameflow = null;
+                    gameflow_ReadyCheck = false;gameflow_ChampSelect = false;
+                    gameflow_ChampSelectSpoken = false;conversations_id_get = false;
+                    conversations_id = null;
                     console.log("[INFO] Clean Data Done!");
                 }
             }
         });        
     },
-    /*
+    lockfile: function(){
+        fs.readFile(client_dir + '/lockfile', 'utf8', (err, data) => {
+            try{
+                lockfile_str = data;
+                console.log("[INFO] "+ lockfile_str + "\n");
+                lockfile = lockfile_str?.split(':');
+                // lockfile 
+                client_lockfile.lockfile_name =  lockfile[0];
+                client_lockfile.lockfile_pid = lockfile[1];
+                client_lockfile.lockfile_port = lockfile[2];
+                //lockfile.lockfile_token = lockfile[3];
+                client_lockfile.lockfile_method = lockfile[4];
+                // Token 解密
+                var tmp_token = "riot:" + lockfile[3];
+                var encode_token = base64.encode(tmp_token);
+                client_lockfile.lockfile_token = "Basic " + encode_token
+                console.log("[INFO] Token:" + client_lockfile.lockfile_token);
+    
+                console.log("\n",client_lockfile.lockfile_name,"\n",client_lockfile.lockfile_pid,"\n",client_lockfile.lockfile_port,"\n",client_lockfile.lockfile_token,"\n",client_lockfile.lockfile_method,);
+                console.log("[INFO] LOL lockfile Done!");
+    
+                url_prefix = client_lockfile.lockfile_method + "://127.0.0.1:" + client_lockfile.lockfile_port;
+                console.log("[INFO] Url:" + url_prefix);
+                console.log("[INFO] LOL url Done!\n");
+                game_is_notfound = false; is_lockfile_get = true;
+            }catch(error){
+                client_is_found = false;client_is_notfound = false;is_lockfile_get = false;
+                console.error("[ERROR - lockfile] "+err);
+                console.error("[ERROR - lockfile] "+error);
+                console.warn("[WARN - lockfile] 請確認是否有使用管理員權限執行，或是確保你的遊戲是否啟動了!" + "\n");
+            }
+        });
+    },
     is_game_running: function(){
         find('name', 'League of Legends', true).then(function (process_list) {
             console.log("我有偷跑");
@@ -109,15 +112,7 @@ const $ = {
                 }
             }
         });
-    }*/
+    }
 }
 
-var check_timer = reInterval(function(){
-    if(client_is_found){
-        if(is_lockfile_get){
-            require('./get_summoner_Info');
-        }
-    }else{
-        $.is_lol_client_open(); // client
-    }
-}, 1000) // default timer is not change default timer is dynamic
+module.exports = $;

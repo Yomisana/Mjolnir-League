@@ -7,7 +7,7 @@ const path = require('path');
  */
 
 // electron
-//global.permission = false;
+global.permission = false;
 global.taskbar_tray = null; // Windows tray
 global.locate = null; // Window locate
 global.pid = 0; // Mjolnir League本身的 PID
@@ -89,7 +89,7 @@ global.refresh_check_path_timer = { // check lol client path timer
              * NORMAL_TFT: 一般戰旗
              * RANKED_TFT: 積分戰旗
              * RANKED_TFT_TURBO: 超級抽抽樂戰旗
-             * RANKED_TFT_PAIRS: 雙人搭檔工作房
+             * RANKED_TFT_PAIRS: 雙人搭檔工作房 更新名稱:RANKED_TFT_DOUBLE_UP 
              *
              * 阿福:
              * URF: 阿福快打
@@ -122,6 +122,8 @@ global.refresh_check_path_timer = { // check lol client path timer
      * EndOfGame
      * 
      */
+    //ml_main.webContents.send("client_is_found", "尚未找到 LOL 客戶端")
+    global.client_status = ["尚未找到 LOL 客戶端","找到 LOL 客戶端"];
     global.gameflow = null;
     global.gameflow_ReadyCheck = false;
     global.gameflow_ChampSelect = false;
@@ -135,11 +137,6 @@ global.refresh_check_path_timer = { // check lol client path timer
         is_system_chat: false,
         type: ["celebration","chat"]
     }
-
-
-
-
-
 
 // Logger
 global.nowtimes = function(flags){

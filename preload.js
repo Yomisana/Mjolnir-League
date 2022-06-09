@@ -22,7 +22,7 @@ contextBridge.exposeInMainWorld(
                 // program
                 "now_time",
                 "update_time",
-                "game_is_found",
+                "client_is_found",
                 // summoner
                 "summoner_name",
                 "summoner_level",

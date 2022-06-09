@@ -209,7 +209,7 @@ body{
   font-weight: 400;
 }
 
-.profile .profile_details .game_status{
+.profile .profile_details #client_is_found{
   font-size: 12px;
 }
 

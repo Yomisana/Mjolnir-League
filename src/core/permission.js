@@ -26,13 +26,12 @@ const $ = {
                 console.log("[INFO] 以管理員權限執行了!");
                 ml_main.webContents.send("software_version", software_version);
                 ml_main.webContents.send("admin_permission", "管理員權限");
-                //permission = true;
-                require('./check_path'); // 檢查位置
+                permission = true;
             }else{
                 console.warn("[WARN] 沒有以管理員權限執行!");
                 $.showMessage(ml_main,"沒有以管理員權限執行!","error", software_name + " - 請以管理員權限執行!");
                 $.closeApp();
-                //permission = false;
+                permission = false;
             }
         });
     },
