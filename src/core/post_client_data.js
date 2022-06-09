@@ -16,3 +16,5 @@ const $ = {
         })
     }
 };
+
+module.exports = $;

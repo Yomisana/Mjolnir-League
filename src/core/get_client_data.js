@@ -76,6 +76,7 @@ const $ = {
                         conversations_id = null;
                         ml_main.webContents.send("game_status", gameflow + " | 你目前可能在首頁或是選擇模式大廳");
                     }else if(gameflow == "Lobby"){
+                        gameflow_ReadyCheck = false;
                         gameflow_ChampSelect = false;conversations_id_get = false;
                         gameflow_ChampSelectSpoken = false;
                         conversations_id = null;
