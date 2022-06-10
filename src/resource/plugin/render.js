@@ -41,3 +41,11 @@ window.api.receive("summoner_region", (data)=>{
 window.api.receive("game_status", (data)=>{
     $('#game_status').text(data);
 });
+
+window.api.receive("summoner_wallet_ip", (data)=>{
+    $('#summoner_wallet_ip').text(data);
+});
+
+window.api.receive("summoner_wallet_rp", (data)=>{
+    $('#summoner_wallet_rp').text(data);
+});

@@ -32,6 +32,8 @@ contextBridge.exposeInMainWorld(
                 "summoner_status_message",
                 // game
                 "game_status",
+                "summoner_wallet_ip",
+                "summoner_wallet_rp",
             ];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 

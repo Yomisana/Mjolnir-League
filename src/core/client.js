@@ -38,6 +38,8 @@ const $ = {
                     ml_main.webContents.send("summoner_status_message", "Waiting...");
                     ml_main.webContents.send("summoner_masteryScore", "Waiting...");
                     ml_main.webContents.send("summoner_region", "Waiting...");
+                    ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
+                    ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
                     // game status
                     ml_main.webContents.send("game_status", "Waiting...");
                     client_is_found = false;client_is_notfound = true;is_lockfile_get = false;

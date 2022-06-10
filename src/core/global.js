@@ -137,6 +137,14 @@ global.refresh_check_path_timer = { // check lol client path timer
         is_system_chat: false,
         type: ["celebration","chat"]
     }
+    global.wallet = {
+        ip: 0, // 藍粉(ip)
+        rp: 0  // 聯盟幣(rp)
+    }
+    global.summoner_info = {
+        xpSinceLastLevel: 0, // 當前經驗值
+        xpUntilNextLevel: 0, // 升級的經驗值
+    }
 
 // Logger
 global.nowtimes = function(flags){

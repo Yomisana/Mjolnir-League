@@ -33,7 +33,7 @@ const $ = {
                     me.id = me_str.id;
                     me.lol.gameQueueType = me_str.lol.gameQueueType;
                     me.lol.level = me_str.lol.level;
-                    ml_main.webContents.send("summoner_level", me.lol.level);
+                    // ml_main.webContents.send("summoner_level", me.lol.level);
                     me.lol.masteryScore = me_str.lol.masteryScore;
                     ml_main.webContents.send("summoner_masteryScore", me.lol.masteryScore);
                     me.lol.timeStamp = me_str.lol.timeStamp;
@@ -48,7 +48,12 @@ const $ = {
                     }
                     me.puuid = me_str.puuid;
                     me.statusMessage = me_str.statusMessage;
-                    ml_main.webContents.send("summoner_status_message", me.statusMessage);
+                    if(me.statusMessage == ""){
+                        ml_main.webContents.send("summoner_status_message", "None");
+                    }else{
+                        ml_main.webContents.send("summoner_status_message", me.statusMessage);
+                    }
+                    
                     me.summonerId = me_str.summonerId;
     
                 }catch (error){
@@ -198,6 +203,55 @@ const $ = {
             }
         );
     },
+    wallet: function(){
+        // /lol-store/v1/wallet
+        request.get({
+            url: url_prefix + '/lol-store/v1/wallet',
+            strictSSL: false,
+            headers:{
+                'Accept': 'application/json',
+                'Authorization': client_lockfile.lockfile_token
+            }
+        },
+            function(err, httpResponse, body){
+                try{
+                    var wallet_str = JSON.parse(body);
+                    wallet.ip = wallet_str.ip;
+                    wallet.rp = wallet_str.rp;
+                    //console.log("[INFO - wallet] 藍粉: " + wallet.ip + " 聯盟幣: " + wallet.rp);
+                    ml_main.webContents.send("summoner_wallet_ip", wallet.ip);
+                    ml_main.webContents.send("summoner_wallet_rp", wallet.rp);
+                }catch (error){
+                    console.error("[ERROR - summoner_wallet] " + error);
+                    client_is_found = false;
+                }
+            }
+        );
+    },
+    summoner_info: function(){
+        // /lol-summoner/v1/current-summoner
+        request.get({
+            url: url_prefix + '/lol-summoner/v1/current-summoner',
+            strictSSL: false,
+            headers:{
+                'Accept': 'application/json',
+                'Authorization': client_lockfile.lockfile_token
+            }
+        },
+            function(err, httpResponse, body){
+                try{
+                    var summoner_info_str = JSON.parse(body);
+                    //console.log("[DEBUG - summoner_info] " + body);
+                    summoner_info.xpSinceLastLevel = summoner_info_str.xpSinceLastLevel;
+                    summoner_info.xpUntilNextLevel = summoner_info_str.xpUntilNextLevel;
+                    ml_main.webContents.send("summoner_level", me.lol.level + `(${summoner_info.xpSinceLastLevel} / ${summoner_info.xpUntilNextLevel})`);
+                }catch (error){
+                    console.error("[ERROR - summoner_wallet] " + error);
+                    client_is_found = false;
+                }
+            }
+        );
+    }
 }
 
 module.exports = $;

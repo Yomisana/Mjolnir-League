@@ -11,6 +11,8 @@ var check_timer = reInterval(function(){
     if(client_is_found){
         if(is_lockfile_get){
             get.summoner_data();
+            get.wallet();
+            get.summoner_info();
             if(me.id != ""){
                 get.gameflow();
                 if(gameflow_ReadyCheck){
