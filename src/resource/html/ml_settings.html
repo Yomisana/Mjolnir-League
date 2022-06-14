@@ -12,6 +12,17 @@
         <!-- Google Icons -->
         <link rel="stylesheet" href="../css/google_icons.css">
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+        <!-- IPC -->
+        <script>
+            function onAbout(){
+              window.api.send("toMain","about_software");
+            }
+
+            window.api.receive("software_version", (data) => {
+            $(".software_version").text(data);
+          });
+        </script>
     </head>
     <body>
         <!-- the content goes here -->
@@ -22,7 +33,7 @@
               <img id="local_logo" src="../img/ml-logo.png" alt="image error">
               <div class="logo_name">Mjolnir League</div>
             </div>
-            <i class="material-icons" id="menu_btn">menu</i>
+            <i class="material-icons" id="menu_btn">arrow_back_ios_new</i>
           </div>
           <ul class="nav_list">
             <!-- 首頁 -->
@@ -75,10 +86,12 @@
         </div>
         <!-- body: 頁面內容 -->
         <div class="body_content">
-          <div class="text">Chat</div>
-          <span style="color:white;">還在開發中...敬請期待</span>
-          <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br>
-          <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
+          <div class="text">Settings</div>
+            <span style="color:white;">版本:</span><div class="software_version"></div><br>
+            
+          <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br> -->
+          <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
+
         </div>
 
         <!-- 讓按鈕有用吧! -->

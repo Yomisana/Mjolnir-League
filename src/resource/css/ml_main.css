@@ -6,7 +6,9 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-
+a {
+  color: white;
+}
 body{
   background-color: #2e2c29;
   position: relative;

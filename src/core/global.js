@@ -44,8 +44,8 @@ global.log_dir = process.env.APPDATA + '\\.Mjolnir-League\\logger';
 
 // game setting
 global.refresh_check_path_timer = { // check lol client path timer
-    open: 1,
-    close: 5,
+    open: 1000,
+    close: 5000,
 } 
     // client found?
     global.client_is_found = false; // main

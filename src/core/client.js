@@ -28,20 +28,32 @@ const $ = {
                     });
                 }
             }else{
+                ml_main.webContents.send("client_is_found", client_status[0]);
+                // summoner
+                ml_main.webContents.send("summoner_name", "Waiting...");
+                ml_main.webContents.send("summoner_level", "Waiting...");
+                ml_main.webContents.send("summoner_status", "Waiting...");
+                ml_main.webContents.send("summoner_status_message", "Waiting...");
+                ml_main.webContents.send("summoner_masteryScore", "Waiting...");
+                ml_main.webContents.send("summoner_region", "Waiting...");
+                ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
+                ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
+                // game status
+                ml_main.webContents.send("game_status", "Waiting...");
                 if(client_is_notfound == false){
                     console.log('[INFO] 尚未找到 LOL 客戶端' + "\n");
-                    ml_main.webContents.send("client_is_found", client_status[0]);
-                    // summoner
-                    ml_main.webContents.send("summoner_name", "Waiting...");
-                    ml_main.webContents.send("summoner_level", "Waiting...");
-                    ml_main.webContents.send("summoner_status", "Waiting...");
-                    ml_main.webContents.send("summoner_status_message", "Waiting...");
-                    ml_main.webContents.send("summoner_masteryScore", "Waiting...");
-                    ml_main.webContents.send("summoner_region", "Waiting...");
-                    ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
-                    ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
-                    // game status
-                    ml_main.webContents.send("game_status", "Waiting...");
+                    // ml_main.webContents.send("client_is_found", client_status[0]);
+                    // // summoner
+                    // ml_main.webContents.send("summoner_name", "Waiting...");
+                    // ml_main.webContents.send("summoner_level", "Waiting...");
+                    // ml_main.webContents.send("summoner_status", "Waiting...");
+                    // ml_main.webContents.send("summoner_status_message", "Waiting...");
+                    // ml_main.webContents.send("summoner_masteryScore", "Waiting...");
+                    // ml_main.webContents.send("summoner_region", "Waiting...");
+                    // ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
+                    // ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
+                    // // game status
+                    // ml_main.webContents.send("game_status", "Waiting...");
                     client_is_found = false;client_is_notfound = true;is_lockfile_get = false;
                     console.log("[INFO] Clean Data");
                     client_path = null;
