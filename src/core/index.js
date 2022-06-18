@@ -10,9 +10,10 @@ var reInterval = require('reinterval');
 var check_timer = reInterval(function(){
 
     if(client_is_found){
-        ml_main.webContents.send("client_is_found", client_status[1]);
+        //ml_main.webContents.send("client_is_found", client_status[1]);
         check_timer.reschedule(refresh_check_path_timer.open);
         if(is_lockfile_get){
+            ml_main.webContents.send("client_is_found", client_status[1]);
             get.summoner_data();
             get.wallet();
             get.summoner_info();

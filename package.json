@@ -1,6 +1,6 @@
 {
   "name": "mjolnir-league",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Mjolnir League dev:yomisana",
   "main": "index.js",
   "scripts": {

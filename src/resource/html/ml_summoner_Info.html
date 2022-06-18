@@ -67,6 +67,13 @@
             $('#game_status').text(localStorage.getItem('game_status_data'));
             //$('#game_status').text(data); // span normal
           });
+          
+          // sidebar
+          window.api.receive("client_is_found", (data)=>{
+            localStorage.setItem('client_is_found_data',data);
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+            //$('#client_is_found').text(data);// span normal
+          });
 
           function load(){
             $('#summoner_name').text(localStorage.getItem('summoner_name_data'));
@@ -78,6 +85,8 @@
             $('#summoner_wallet_rp').text(localStorage.getItem('summoner_wallet_rp_data'));
             $('#summoner_masteryScore').text(localStorage.getItem('summoner_masteryScore_data'));
             $('#game_status').text(localStorage.getItem('game_status_data'));
+            // sidebar
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
           }
       </script>
     </head>

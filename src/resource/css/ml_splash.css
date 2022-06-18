@@ -20,7 +20,7 @@ body {
       left: 0px;
       right: 0px;
   }
-  
+
   .noselect {
       -webkit-touch-callout : none ;
       -webkit-user-select : none ;
@@ -48,7 +48,7 @@ body {
       bottom:0px;
       height:24px;
     }
-  
+
   .flex {
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
@@ -68,28 +68,28 @@ body {
       right:15px;
       top: 22px;
   }
-  
+
     /* Safari */
     @-webkit-keyframes spin {
         0% {
             -webkit-transform: rotate(0deg);
         }
-  
+
         100% {
             -webkit-transform: rotate(360deg);
         }
     }
-  
+
     @keyframes spin {
         0% {
             transform: rotate(0deg);
         }
-  
+
         100% {
             transform: rotate(360deg);
         }
     }
-  
+
     .center {
         border: none !important;
         text-align: center;
@@ -101,7 +101,7 @@ body {
       bottom: 7px;
       right: 15px;
   }
-  
+
     .progressbars{
       background-color: transparent;
       height:7px;
@@ -112,7 +112,7 @@ body {
       border-radius: 0px;
       z-index: 11;
     }
-    
+
     .progressbars > div{
       background-color: #3070b7;
       height:7px;
@@ -121,7 +121,7 @@ body {
       transition: width 0.125s;
       border-radius: 0px;
     }
-  
+
     * {
       user-select: none;
       -webkit-user-drag: none;

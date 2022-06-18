@@ -10,9 +10,10 @@ window.api.receive("update_time", (data)=>{
     $('#update_time').text(data);
 });
 
-window.api.receive("client_is_found", (data)=>{
-    $('#client_is_found').text(data);
-});
+// sidebar
+// window.api.receive("client_is_found", (data)=>{
+//     $('#client_is_found').text(data);
+// });
 
 // Summoner
 // window.api.receive("summoner_name", (data)=>{

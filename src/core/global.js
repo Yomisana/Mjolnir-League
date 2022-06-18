@@ -123,7 +123,7 @@ global.refresh_check_path_timer = { // check lol client path timer
      * 
      */
     //ml_main.webContents.send("client_is_found", "尚未找到 LOL 客戶端")
-    global.client_status = ["尚未找到 LOL 客戶端","找到 LOL 客戶端"];
+    global.client_status = ["尋找LOL客戶端中...","找到 LOL 客戶端"];
     global.gameflow = null;
     global.gameflow_ReadyCheck = false;
     global.gameflow_ChampSelect = false;

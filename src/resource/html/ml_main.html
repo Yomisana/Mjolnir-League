@@ -26,9 +26,18 @@
             //$('#game_status').text(data); // span normal
           });
 
+          // sidebar
+          window.api.receive("client_is_found", (data)=>{
+            localStorage.setItem('client_is_found_data',data);
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+            //$('#client_is_found').text(data);// span normal
+          });
+
           function load(){
             $('#summoner_region').text(localStorage.getItem('summoner_region_data'));
             $('#game_status').text(localStorage.getItem('game_status_data'));
+            // sidebar
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
           }
       </script>
     </head>
@@ -85,7 +94,7 @@
                 <!-- <img id="profile_logo" src="../img/account_circle.png" alt="image error"> -->
                 <div class="profile_box">
                   <div class="name">訪客</div>
-                  <span style="color:white" id="client_is_found">尋找LOL客戶端中...</span>
+                  <span style="color:white" id="client_is_found"></span>
                 </div>
               </div>
               <a href="ml_settings.html"><i class="material-icons" id="settings">settings</i></a>

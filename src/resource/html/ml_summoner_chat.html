@@ -12,8 +12,26 @@
         <!-- Google Icons -->
         <link rel="stylesheet" href="../css/google_icons.css">
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+        <!-- 本地儲存資料 -->
+        <script>
+
+
+          // sidebar
+          window.api.receive("client_is_found", (data)=>{
+            localStorage.setItem('client_is_found_data',data);
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+            //$('#client_is_found').text(data);// span normal
+          });
+
+          function load(){
+            
+            // sidebar
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+          }
+      </script>
     </head>
-    <body>
+    <body onload="load()">
         <!-- the content goes here -->
         <div class="sidebar">
           <div class="logo_content">

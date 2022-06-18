@@ -13,18 +13,31 @@
         <link rel="stylesheet" href="../css/google_icons.css">
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
 
-        <!-- IPC -->
+        <!-- 本地儲存資料 -->
         <script>
-            function onAbout(){
-              window.api.send("toMain","about_software");
-            }
+          function onAbout(){
+            window.api.send("toMain","about_software");
+          }
 
-            window.api.receive("software_version", (data) => {
+          window.api.receive("software_version", (data) => {
             $(".software_version").text(data);
           });
-        </script>
+
+          // sidebar
+          window.api.receive("client_is_found", (data)=>{
+            localStorage.setItem('client_is_found_data',data);
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+            //$('#client_is_found').text(data);// span normal
+          });
+
+          function load(){
+
+            // sidebar
+            $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+          }
+      </script>
     </head>
-    <body>
+    <body onload="load()">
         <!-- the content goes here -->
         <div class="sidebar">
           <div class="logo_content">
@@ -88,7 +101,7 @@
         <div class="body_content">
           <div class="text">Settings</div>
             <span style="color:white;">版本:</span><div class="software_version"></div><br>
-            
+
           <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br> -->
           <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
 
