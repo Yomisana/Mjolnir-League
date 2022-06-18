@@ -8,7 +8,6 @@ const electronLogger = require('electron-log');
 const {autoUpdater} = require("electron-updater");
 const fs = require('fs-extra');
 const path = require('path');
-const exec = require('child_process').exec;
 
 // 區域宣告
 let isQuiting;
@@ -192,14 +191,6 @@ app.whenReady().then(() => {
           event.returnValue = false;
         }
     });
-
-    
-    // 防止視窗超出大小或過小
-    // ml_main.on('resize', () => {
-    //     let size = ml_main.getSize();
-    //     if(size[0] != main_set.width || size[1] != main_set.height)
-    //     ml_main.setSize(main_set.width,main_set.height);
-    // });
 });
 
 // 額外設定

@@ -7,13 +7,81 @@
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
         <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
-	      <script src="../plugin/render.js"></script>
 
         <!-- Google Icons -->
         <link rel="stylesheet" href="../css/google_icons.css">
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+        <!-- 本地儲存資料 -->
+        <script>
+          window.api.receive("summoner_name", (data)=>{
+            localStorage.setItem('summoner_name_data',data);
+            $('#summoner_name').text(localStorage.getItem('summoner_name_data'));
+            //$('#summoner_region').text(data); // span normal
+          });
+
+          window.api.receive("summoner_level", (data)=>{
+            localStorage.setItem('summoner_level_data',data);
+            $('#summoner_level').text(localStorage.getItem('summoner_level_data'));
+            //$('#summoner_level').text(data); // span normal
+          });
+
+          window.api.receive("summoner_region", (data)=>{
+            localStorage.setItem('summoner_region_data',data);
+            $('#summoner_region').text(localStorage.getItem('summoner_region_data'));
+            //$('#summoner_region').text(data); // span normal
+          });
+
+          window.api.receive("summoner_status", (data)=>{
+            localStorage.setItem('summoner_status_data',data);
+            $('#summoner_status').text(localStorage.getItem('summoner_status_data'));
+            //$('#summoner_status').text(data); // span normal
+          });
+
+          window.api.receive("summoner_status_message", (data)=>{
+            localStorage.setItem('summoner_status_message_data',data);
+            $('#summoner_status_message').text(localStorage.getItem('summoner_status_message_data'));
+            //$('#summoner_status_message').text(data); // span normal
+          });
+
+          window.api.receive("summoner_wallet_ip", (data)=>{
+            localStorage.setItem('summoner_wallet_ip_data',data);
+            $('#summoner_wallet_ip').text(localStorage.getItem('summoner_wallet_ip_data'));
+            // $('#summoner_wallet_ip').text(data); // span normal
+          });
+
+          window.api.receive("summoner_wallet_rp", (data)=>{
+            localStorage.setItem('summoner_wallet_rp_data',data);
+            $('#summoner_wallet_rp').text(localStorage.getItem('summoner_wallet_rp_data'));
+            // $('#summoner_wallet_rp').text(data); // span normal
+          });
+
+          window.api.receive("summoner_masteryScore", (data)=>{
+            localStorage.setItem('summoner_masteryScore_data',data);
+            $('#summoner_masteryScore').text(localStorage.getItem('summoner_masteryScore_data'));
+            //$('#summoner_masteryScore').text(data);
+          });
+
+          window.api.receive("game_status", (data)=>{
+            localStorage.setItem('game_status_data',data);
+            $('#game_status').text(localStorage.getItem('game_status_data'));
+            //$('#game_status').text(data); // span normal
+          });
+
+          function load(){
+            $('#summoner_name').text(localStorage.getItem('summoner_name_data'));
+            $('#summoner_level').text(localStorage.getItem('summoner_level_data'));
+            $('#summoner_region').text(localStorage.getItem('summoner_region_data'));
+            $('#summoner_status').text(localStorage.getItem('summoner_status_data'));
+            $('#summoner_status_message').text(localStorage.getItem('summoner_status_message_data'));
+            $('#summoner_wallet_ip').text(localStorage.getItem('summoner_wallet_ip_data'));
+            $('#summoner_wallet_rp').text(localStorage.getItem('summoner_wallet_rp_data'));
+            $('#summoner_masteryScore').text(localStorage.getItem('summoner_masteryScore_data'));
+            $('#game_status').text(localStorage.getItem('game_status_data'));
+          }
+      </script>
     </head>
-    <body>
+    <body onload="load()">
         <!-- the content goes here -->
         <div class="sidebar">
           <div class="logo_content">
@@ -83,6 +151,7 @@
           <span style="color:white;">召喚師狀態訊息:</span><span style="color:white" id="summoner_status_message"></span><br>
           <span style="color:white;">藍粉(ip):</span><span style="color:white" id="summoner_wallet_ip"></span>
           <span style="color:white;">聯盟幣(rp):</span><span style="color:white" id="summoner_wallet_rp"></span><br>
+          <span style="color:white;">總專精分數:</span><span style="color:white" id="summoner_masteryScore"></span><br>
           <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br>
         </div>
 

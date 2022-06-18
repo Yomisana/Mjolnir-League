@@ -7,13 +7,32 @@
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
         <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
-	      <script src="../plugin/render.js"></script>
 
         <!-- Google Icons -->
         <link rel="stylesheet" href="../css/google_icons.css">
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+        <!-- 本地儲存資料 -->
+        <script>
+          window.api.receive("summoner_region", (data)=>{
+            localStorage.setItem('summoner_region_data',data);
+            $('#summoner_region').text(localStorage.getItem('summoner_region_data'));
+            //$('#summoner_region').text(data); // span normal
+          });
+
+          window.api.receive("game_status", (data)=>{
+            localStorage.setItem('game_status_data',data);
+            $('#game_status').text(localStorage.getItem('game_status_data'));
+            //$('#game_status').text(data); // span normal
+          });
+
+          function load(){
+            $('#summoner_region').text(localStorage.getItem('summoner_region_data'));
+            $('#game_status').text(localStorage.getItem('game_status_data'));
+          }
+      </script>
     </head>
-    <body>
+    <body onload="load()">
         <!-- the content goes here -->
         <div class="sidebar">
           <div class="logo_content">
