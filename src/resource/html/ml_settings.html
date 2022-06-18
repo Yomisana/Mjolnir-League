@@ -7,7 +7,6 @@
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
         <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
-	      <script src="../plugin/render.js"></script>
 
         <!-- Google Icons -->
         <link rel="stylesheet" href="../css/google_icons.css">
@@ -15,12 +14,13 @@
 
         <!-- 本地儲存資料 -->
         <script>
-          function onAbout(){
-            window.api.send("toMain","about_software");
-          }
+          // function onAbout(){
+          //   window.api.send("toMain","about_software");
+          // }
 
           window.api.receive("software_version", (data) => {
-            $(".software_version").text(data);
+            localStorage.setItem('software_version_data',data);
+            $('#software_version').text(localStorage.getItem('software_version_data'));
           });
 
           // sidebar
@@ -31,7 +31,9 @@
           });
 
           function load(){
-
+            // 版本呼叫提取
+            window.api.send("toMain","sversion");
+            $('#software_version').text(localStorage.getItem('software_version_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
           }
@@ -100,7 +102,7 @@
         <!-- body: 頁面內容 -->
         <div class="body_content">
           <div class="text">Settings</div>
-            <span style="color:white;">版本:</span><div class="software_version"></div><br>
+            <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
 
           <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br> -->
           <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->

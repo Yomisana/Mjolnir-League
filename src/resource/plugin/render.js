@@ -1,6 +1,6 @@
-window.api.receive("software_version", (data)=>{
-    $('#software_version').text(data);
-});
+// window.api.receive("software_version", (data)=>{
+//     $('#software_version').text(data);
+// });
 
 window.api.receive("now_time", (data)=>{
     $('#now_time').text(data);

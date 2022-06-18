@@ -65,6 +65,8 @@ ipcMain.on("toMain", async (event, args) => {
     console.log('[ipcMain] ' + args + ' 事件已觸發');
     if(args == "closeapp"){
       $.closeApp();
+    }else if(args == "sversion"){
+      ml_main.webContents.send("software_version", software_version);
     }
     // }else if(args == "Clean_log"){
     //   fs.readdir(path.join(log_dir), (err, files) => {
