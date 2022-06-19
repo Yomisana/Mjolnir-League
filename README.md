@@ -1,7 +1,7 @@
 # Mjolnir-League
 此軟體僅有Riot合法的功能 - 後面規劃將僅暫定...
 # 功能
-- 電腦端(軟體 electron)
+- 電腦端
     - 就和 [Discord](https://discord.com) 一樣不小心關閉視窗也會在系統列可以找到喔! ✔
     - 自動接受戰局 ✔
     - 創建對戰房間
