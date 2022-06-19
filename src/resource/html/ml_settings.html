@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <title>Mjolnir League</title>
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-        <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
+        <link href="../css/ml_settings.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
 
         <!-- Google Icons -->
@@ -30,12 +30,23 @@
             //$('#client_is_found').text(data);// span normal
           });
 
+          // accept_checkbox
+          // window.api.receive("accept_checkbox", (data)=>{
+          //   localStorage.setItem('accept_checkbox',data);
+          //   $('accept_checkbox').text(localStorage.getItem('accept_checkbox_data'));
+          // });
+
           function load(){
             // 版本呼叫提取
             window.api.send("toMain","sversion");
             $('#software_version').text(localStorage.getItem('software_version_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+            
+            // checkbox
+            //console.log(localStorage.getItem("accept_checkbox_data")); debug
+            window.api.send('toMain', ['accept_checkbox', localStorage.getItem("accept_checkbox_data")]); // 後端 
+            document.getElementById("accept_checkbox").checked = (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):''; //前端
           }
       </script>
     </head>
@@ -104,39 +115,32 @@
           <div class="text">Settings</div>
             <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
 
-          <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br> -->
-          <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
+            <div class="switch"><!-- 按鈕區 -->
+              <input type="checkbox" class="accept_checkbox" id="accept_checkbox" onchange="accept_checkbox_event(this)">
+              <!-- <label><input type="checkbox" class="accept_checkbox" id="accept_checkbox" name="" value="">自動接受對戰</label> -->
+              <label>自動接受對戰</label>
+              <span class="accept_checkbox_background"></span>
+              <span class="accept_checkbox_circle"></span>
+            </div>
 
-        </div>
+            <!-- 讓按鈕有用吧! -->
+            <script type="text/javascript">
+              let menu_btn = document.querySelector("#menu_btn");
+              let sidebar = document.querySelector(".sidebar");
 
-        <!-- 讓按鈕有用吧! -->
-        <script type="text/javascript">
-          let menu_btn = document.querySelector("#menu_btn");
-          let sidebar = document.querySelector(".sidebar");
+              menu_btn.onclick = function(){
+                sidebar.classList.toggle("active");
+              }
 
-          menu_btn.onclick = function(){
-            sidebar.classList.toggle("active");
-          }
+              function oncloseapp(){
+                    window.api.send("toMain","closeapp");
+              }
 
-          function oncloseapp(){
-                window.api.send("toMain","closeapp");
-          }
-        </script>
-        <!-- <div class="text_status">
-            <span style="color:white;">軟體狀態</span><br>
-            <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
-            <span style="color:white;">客戶端狀態:</span><span style="color:white" id="game_is_found"></span><br>
-            <span style="color:white;">現在時間1:</span><span style="color:white" id="now_time"></span><br>
-            <span style="color:white;">最後檢查的時間1:</span><span style="color:white" id="update_time"></span><br>
-            <span style="color:white;">遊戲召喚師資訊</span><br>
-            <span style="color:white;">召喚師名稱:</span><span style="color:white" id="summoner_name"></span><br>
-            <span style="color:white;">召喚師等級:</span><span style="color:white" id="summoner_level"></span><br>
-            <span style="color:white;">召喚師狀態:</span><span style="color:white" id="summoner_status"></span><br>
-            <span style="color:white;">召喚師狀態訊息:</span><span style="color:white" id="summoner_status_message"></span><br>
-            <span style="color:white;">總專精分數:</span><span style="color:white" id="summoner_masteryScore"></span><br>
-
-            <span style="color:white;">遊戲狀態</span><br>
-
-        </div> -->
+              function accept_checkbox_event(vaule){
+                localStorage.setItem('accept_checkbox_data', vaule.checked); // 前端
+                window.api.send('toMain', ['accept_checkbox', vaule.checked]); // 後端
+              }
+            </script>
+        </div>  <!-- Body End -->
     </body>
 </html>

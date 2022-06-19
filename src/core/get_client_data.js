@@ -142,8 +142,8 @@ const $ = {
                             ml_main.webContents.send("game_status", gameflow + " | 你目前在匹配未知列隊中?? 這...你辦不到的!! 伺服器是不是炸了");
                         }
                     }else if(gameflow == "ReadyCheck"){ // 自動接受
-                        ml_main.webContents.send("game_status", gameflow + " | 對戰正在自動接受中...");
-                        console.log("[INFO] 傳送自動接受資訊中...");
+                        // ml_main.webContents.send("game_status", gameflow + " | 對戰正在自動接受中...");
+                        // console.log("[INFO] 傳送自動接受資訊中...");
                         gameflow_ReadyCheck = true;
                         gameflow_ChampSelect = false;conversations_id_get = false;
                         gameflow_ChampSelectSpoken = false;

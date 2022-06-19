@@ -66,42 +66,6 @@ const $ = { // 已完成不需要變更
     }
 }
 
-// ipcMain
-
-ipcMain.on("toMain", async (event, args) => {
-    console.log('[ipcMain] ' + args + ' 事件已觸發');
-    if(args == "closeapp"){
-      $.closeApp();
-    }else if(args == "sversion"){
-      ml_main.webContents.send("software_version", software_version);
-    }
-    // }else if(args == "Clean_log"){
-    //   fs.readdir(path.join(log_dir), (err, files) => {
-    //     if (err) {
-    //       console.error("[ERROR - Clean log] "+err);
-    //     }
-    //     // DEBUG
-    //     //console.log(files);
-    //     //console.log(path.join(log_dir));
-  
-    //     for (const file of files) {
-    //       fs.unlink(path.join(log_dir, file), err => {
-    //         if (err) {
-    //           console.error("[ERROR - Ready Clean log] "+err);
-    //         }
-    //       });
-    //     }
-    //   });
-    // }else if(args == "kill_lolrender"){
-    //   exec('taskkill /f /im LeagueClientUxRender.exe',function (error, stdout, stderr) {
-    //     //console.log(stdout);
-    //     console.log("[INFO] 發送結束客戶端渲染畫面程序完畢!");
-    //     if(error)
-    //       console.error("[ERROR] " + error);
-    //   });
-    // }
-});
-
 app.whenReady().then(() => {
     locate = app.getLocale();
     software_version = `${version}`;
@@ -200,6 +164,57 @@ app.whenReady().then(() => {
           event.returnValue = false;
         }
     });
+
+  // ipcMain
+
+  ipcMain.on("toMain", async (event, args) => {
+    console.log('[ipcMain] ' + args + ' 事件已觸發');
+    if(args == "closeapp"){
+      $.closeApp();
+    }else if(args == "sversion"){
+      ml_main.webContents.send("software_version", software_version);
+    }else if(Array.isArray(args)){
+      if(args[0] == "accept_checkbox"){
+        if(args[1]){
+          console.log("啟用自動接受");
+          settings.accept_checkbox = true;
+        }else{
+          console.warn("禁用自動接受");
+          settings.accept_checkbox = false;
+        }
+      }
+    }
+
+    // (args[0] == "accept_checkbox"){
+    //   console.log(args[]);
+    //   console.log("收到前端 自動接受對戰按鈕的值囉:" + );
+
+    // }else if(args == "Clean_log"){
+    //   fs.readdir(path.join(log_dir), (err, files) => {
+    //     if (err) {
+    //       console.error("[ERROR - Clean log] "+err);
+    //     }
+    //     // DEBUG
+    //     //console.log(files);
+    //     //console.log(path.join(log_dir));
+
+    //     for (const file of files) {
+    //       fs.unlink(path.join(log_dir, file), err => {
+    //         if (err) {
+    //           console.error("[ERROR - Ready Clean log] "+err);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }else if(args == "kill_lolrender"){
+    //   exec('taskkill /f /im LeagueClientUxRender.exe',function (error, stdout, stderr) {
+    //     //console.log(stdout);
+    //     console.log("[INFO] 發送結束客戶端渲染畫面程序完畢!");
+    //     if(error)
+    //       console.error("[ERROR] " + error);
+    //   });
+    // }
+  });
 });
 
 // 額外設定

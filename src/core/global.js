@@ -41,7 +41,10 @@ global.log_dir = process.env.APPDATA + '\\.Mjolnir-League\\logger';
             // general
             title: software_name
         }
-
+    // software setting
+    global.settings = {
+        accept_checkbox: false
+    }
 // game setting
 global.refresh_check_path_timer = { // check lol client path timer
     open: 1000,

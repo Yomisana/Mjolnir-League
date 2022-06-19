@@ -1,0 +1,331 @@
+/* Google Font Import - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    -webkit-user-drag: none;
+}
+a {
+  color: white;
+}
+body{
+  background-color: #2e2c29;
+  position: relative;
+  min-height: 100vh;
+  width: 100%
+  /* overflow: hidden; */
+}
+
+.sidebar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 78px;
+  background: #11101d;
+  padding: 6px 14px;
+  transition: all 0.5s ease;
+}
+
+.sidebar.active{
+  width: 240px;
+}
+
+/* LOGO 大小 */
+#local_logo {
+  width:32px;
+  height:32px;
+}
+/* LOGO 與 LOGO text */
+.sidebar .logo_content .logo{
+  color: white;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+.sidebar.active .logo_content .logo{
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* 未知 */
+.logo_content .logo i{
+  font-size: 28px;
+  margin-right: 5px;
+}
+
+/* 文字的大小 */
+.logo_content .logo .logo_name{
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* 選單的按鈕 */
+.sidebar #menu_btn{
+  position: absolute;
+  color: white;
+  top: 6px;
+  left: 50%;
+  font-size: 20px;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  line-height: 50px;
+  transform: translateX(-50%);
+}
+
+.sidebar.active #menu_btn{
+  left: 90%;
+}
+
+/* 選項設定 */
+.sidebar ul{
+  margin-top: 20px;
+}
+
+.sidebar ul li{
+  position: relative;
+  height: 50px;
+  width: 100%;
+  margin: 0 5px;
+  list-style: none;
+  line-height: 50px;
+  border-radius: 12px;
+}
+
+.sidebar ul li .tooltip{
+  font-weight: bold;
+  position: absolute;
+  left: 122px;
+  top: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+  height: 35px;
+  width: 122px;
+  background: white;
+  line-height: 35px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: 0s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar.active ul li .tooltip{
+  display: none;
+}
+
+.sidebar ul li:hover .tooltip{
+  transition: all 0.5s ease;
+  opacity: 1;
+  top: 50%;
+}
+
+.sidebar ul li a{
+  color: white;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.sidebar ul li a:hover{
+  color: #11101d;
+  background: white;
+}
+
+.sidebar ul li a i{
+  height: 50px;
+  min-width: 50px;
+  border-radius: 12px;
+  line-height: 50px;
+  text-align: center;
+}
+
+.sidebar .sidebar_links_name{
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s ease
+}
+
+.sidebar.active .sidebar_links_name{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 最底下的帳號資訊 */
+.sidebar .profile_content{
+  position: absolute;
+  color: white;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.sidebar .profile_content .profile{
+  position: relative;
+  padding: 10px 6px;
+  height: 60px;
+  background:  #1d1b31;
+  transition: all 0.4s ease;
+}
+
+.sidebar.active .profile_content .profile{
+  background:  none;
+}
+
+.profile_content .profile .profile_details{
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.sidebar.active .profile .profile_details{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.profile .profile_details #account_circle{
+  height: 45px;
+  width: 45px;
+  object-fit: cover;
+  border-radius: 12px;
+  font-size: 250%
+}
+
+.profile .profile_details .profile_box{
+  margin-left: 10px;
+}
+
+.profile .profile_details .name{
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.profile .profile_details #client_is_found{
+  font-size: 12px;
+}
+
+.profile #settings{
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 50px;
+  line-height: 50px;
+  font-size: 20px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.4s ease;
+  background:  #1d1b31;
+}
+
+.sidebar.active .profile #settings{
+  left: 88%;
+  background: none;
+}
+
+/* 首頁 - 內容設定 */
+.body_content{
+  position: absolute;
+  height: 100%;
+  width: calc(100% - 78px);
+  left: 78px;
+  transition: all 0.5s ease;
+}
+
+.body_content .text{
+  font-size: 175%;
+  font-weight: 500;
+  color: white;
+  margin: 12px;
+}
+
+.body_content span{
+  font-size: 150%;
+  font-weight: 500;
+  color: white;
+  margin: 12px;
+}
+
+.sidebar.active ~ .body_content{
+  width: calc(100% - 240px);
+  left: 240px;
+}
+
+/* 滑動按鈕區 */
+.switch{
+  width: 55px;
+  height: 25px;
+  position: relative;
+  top: 10px;
+}
+
+.switch label{
+  color: white;
+  white-space:nowrap;
+  position: relative;
+  top: 12.5px;
+  left: 75px;
+}
+/* 自動接受按鈕開關設定 */
+.accept_checkbox,
+.accept_checkbox_circle,
+.accept_checkbox_background{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.accept_checkbox{
+  width: 55px;
+  height: 25px;
+  opacity: 0;
+  top: 10px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.accept_checkbox_circle{
+  width: 25px;
+  height: 25px;
+  border: 1px solid #B3B3B3;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.accept_checkbox_background{
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  background-color: #B3B3B3;
+}
+/* 自動接受按鈕開關設定 - core */
+.accept_checkbox:checked ~ .accept_checkbox_circle{
+  border: 1px solid #43b581;
+  left: 30px;
+
+}
+
+.accept_checkbox:checked ~ .accept_checkbox_background{
+  background-color: #43b581;
+}
+
+.accept_checkbox_circle,
+.accept_checkbox_background{
+  -webkit-transition: All 0.3s ease;
+     -moz-transition: All 0.3s ease;
+       -o-transition: All 0.3s ease;
+          transition: All 0.3s ease;
+}
