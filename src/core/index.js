@@ -8,7 +8,6 @@ const post = require('./post_client_data');
 var reInterval = require('reinterval');
 
 var check_timer = reInterval(function(){
-    console.log(settings.accept_checkbox);
     if(client_is_found){
         //ml_main.webContents.send("client_is_found", client_status[1]);
         check_timer.reschedule(refresh_check_path_timer.open);
@@ -27,7 +26,7 @@ var check_timer = reInterval(function(){
                         ml_main.webContents.send("game_status", gameflow + " | 對戰已匹配等待接受中...");
                         console.log("[INFO] 對戰已匹配等待接受中...");
                     }
-                } 
+                }
             }
         }
     }else{

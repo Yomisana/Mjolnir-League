@@ -30,11 +30,11 @@
             //$('#client_is_found').text(data);// span normal
           });
 
-          // accept_checkbox
-          // window.api.receive("accept_checkbox", (data)=>{
-          //   localStorage.setItem('accept_checkbox',data);
-          //   $('accept_checkbox').text(localStorage.getItem('accept_checkbox_data'));
-          // });
+          //accept_checkbox
+          window.api.receive("accept_checkbox", (data)=>{
+            localStorage.setItem('accept_checkbox',data);
+            $('accept_checkbox').text(localStorage.getItem('accept_checkbox_data'));
+          });
 
           function load(){
             // 版本呼叫提取
@@ -42,11 +42,13 @@
             $('#software_version').text(localStorage.getItem('software_version_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
-            
+
             // checkbox
             //console.log(localStorage.getItem("accept_checkbox_data")); debug
-            window.api.send('toMain', ['accept_checkbox', localStorage.getItem("accept_checkbox_data")]); // 後端 
+            window.api.send('toMain', ['accept_checkbox', (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):'']); // 後端
             document.getElementById("accept_checkbox").checked = (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):''; //前端
+
+
           }
       </script>
     </head>

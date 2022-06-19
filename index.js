@@ -45,7 +45,7 @@ const $ = { // 已完成不需要變更
           },
           {
             label: 'Quit Mjolnir League', click: function () {
-              $.closeApp();  
+              $.closeApp();
             }
           }
         ]);
@@ -121,7 +121,7 @@ app.whenReady().then(() => {
         autoHideMenuBar: true,
         //resizable: false,
         width: main_set.width, height: main_set.height,
-        minWidth: main_set.min_width, 
+        minWidth: main_set.min_width,
         minHeight: main_set.min_height,
         //maxWidth: main_set.max_width, maxHeight: main_set.max_height,
         titleBarStyle: 'hiddenInset',
@@ -271,12 +271,12 @@ autoUpdater.on('checking-for-update', () => {
   autoUpdater.on('error', (err) => {
     console.warn('[WARN] Error in auto-updater. ' + err);
     ml_splash.webContents.send('update_status','Update error');
-    //Error in auto-updater. HttpError: 500 
+    //Error in auto-updater. HttpError: 500
     var reg = RegExp(/HttpError: 500/);
     if(reg.exec(err)){
       $.showMessage(lh_splash,"Updater Error 500 - Github have some issue\n Tips: This time Update is skip.","error", software_name + " - Updater error");
     }
-    //$.closeApp();  
+    //$.closeApp();
   })
 
   autoUpdater.on('download-progress', (progressObj) => {

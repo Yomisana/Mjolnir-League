@@ -38,6 +38,9 @@
             $('#game_status').text(localStorage.getItem('game_status_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
+
+            // 預設使用者幾乎每次只開這個頁面 不常開設定...
+            window.api.send('toMain', ['accept_checkbox', (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):'']); // 後端
           }
       </script>
     </head>
