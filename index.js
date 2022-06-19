@@ -56,6 +56,13 @@ const $ = { // 已完成不需要變更
         taskbar_tray.on('click', () => {
           win.show();
         });
+    },
+    showMessage: function(window, message, type, title){
+      dialog.showMessageBoxSync(window, {
+          message: message,
+          type: type,
+          title: title
+      });
     }
 }
 
@@ -249,7 +256,12 @@ autoUpdater.on('checking-for-update', () => {
   autoUpdater.on('error', (err) => {
     console.warn('[WARN] Error in auto-updater. ' + err);
     ml_splash.webContents.send('update_status','Update error');
-    $.closeApp();
+    //Error in auto-updater. HttpError: 500 
+    var reg = RegExp(/HttpError: 500/);
+    if(reg.exec(err)){
+      $.showMessage(lh_splash,"Updater Error 500 - Github have some issue\n Tips: This time Update is skip.","error", software_name + " - Updater error");
+    }
+    //$.closeApp();  
   })
 
   autoUpdater.on('download-progress', (progressObj) => {
