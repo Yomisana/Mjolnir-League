@@ -7,6 +7,7 @@
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
         <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
+	      <script src="../plugin/render.js"></script>
 
         <!-- Google Icons -->
         <link rel="stylesheet" href="../css/google_icons.css">
@@ -14,7 +15,11 @@
 
         <!-- 本地儲存資料 -->
         <script>
-
+          window.api.receive("game_status", (data)=>{
+            localStorage.setItem('game_status_data',data);
+            $('#game_status').text(localStorage.getItem('game_status_data'));
+            //$('#game_status').text(data); // span normal
+          });
 
           // sidebar
           window.api.receive("client_is_found", (data)=>{
@@ -24,13 +29,13 @@
           });
 
           function load(){
-
+            $('#game_status').text(localStorage.getItem('game_status_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
           }
       </script>
     </head>
-    <body onload="load()">
+    <body>
         <!-- the content goes here -->
         <div class="sidebar">
           <div class="logo_content">
@@ -100,10 +105,8 @@
         </div>
         <!-- body: 頁面內容 -->
         <div class="body_content">
-          <div class="text">Chat</div>
-          <span style="color:white;">還在開發中...敬請期待</span>
-          <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br>
-          <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
+          <div class="text">Battle</div>
+          <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br>
         </div>
 
         <!-- 讓按鈕有用吧! -->

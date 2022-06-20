@@ -67,7 +67,7 @@
             $('#game_status').text(localStorage.getItem('game_status_data'));
             //$('#game_status').text(data); // span normal
           });
-          
+
           // sidebar
           window.api.receive("client_is_found", (data)=>{
             localStorage.setItem('client_is_found_data',data);
@@ -118,6 +118,14 @@
               </a>
               <span class="tooltip">召喚師資訊</span>
             </li>
+            <!-- 對戰資訊 -->
+            <li>
+              <a href="ml_battle_Info.html">
+                <i class="material-icons">sports_mma</i>
+                <span class="sidebar_links_name">Battle INFO</span>
+              </a>
+              <span class="tooltip">對戰資訊</span>
+            </li>
             <!-- 聊天訊息 -->
             <li>
               <a href="ml_summoner_chat.html">
@@ -153,7 +161,7 @@
         <!-- body: 頁面內容 -->
         <div class="body_content">
           <div class="text">Summoner</div>
-          <span style="color:white;">召喚師名稱:</span><span style="color:white" id="summoner_name"></span><br>
+          <span style="color:white;">召喚師名稱:</span><span style="color:white" id="summoner_name"></span><a href="javascript:summoner_nameToClipBoard();"><i class="material-icons" id="summoner_name_copy">content_copy</i></a><br>
           <span style="color:white;">召喚師等級:</span><span style="color:white" id="summoner_level"></span><br>
           <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br>
           <span style="color:white;">召喚師狀態:</span><span style="color:white" id="summoner_status"></span><br>
@@ -173,8 +181,13 @@
             sidebar.classList.toggle("active");
           }
 
+          function summoner_nameToClipBoard() {
+            var span_Text = document.getElementById("summoner_name").innerText;
+            window.api.send("toMain",['summoner_name_copy', span_Text]); // 後端
+          }
+
           function oncloseapp(){
-                window.api.send("toMain","closeapp");
+            window.api.send("toMain","closeapp");
           }
         </script>
         <!-- <div class="text_status">

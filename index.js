@@ -2,7 +2,7 @@
 require('./src/core/global');
 
 const {version} = require("./package.json");
-const {app, BrowserWindow, ipcMain, Tray, Menu, shell} = require('electron');
+const {app, BrowserWindow, ipcMain, Tray, Menu, shell , clipboard} = require('electron');
 const instanceLock = app.requestSingleInstanceLock();
 const electronLogger = require('electron-log');
 const {autoUpdater} = require("electron-updater");
@@ -181,6 +181,16 @@ app.whenReady().then(() => {
         }else{
           console.warn("禁用自動接受");
           settings.accept_checkbox = false;
+        }
+      }
+
+      if(args[0] == "summoner_name_copy"){
+        if(args[1]){
+          console.log("複製召喚師名稱成功");
+          // 複製程式碼
+          clipboard.writeText(args[1]);
+        }else{
+          console.warn("複製召喚師名稱失敗...");
         }
       }
     }
