@@ -187,10 +187,20 @@ app.whenReady().then(() => {
       if(args[0] == "summoner_name_copy"){
         if(args[1]){
           console.log("複製召喚師名稱成功");
-          // 複製程式碼
+          // 複製文字
           clipboard.writeText(args[1]);
         }else{
           console.warn("複製召喚師名稱失敗...");
+        }
+      }
+
+      if(args[0] == "champselect_chat_copy"){
+        if(args[1]){
+          console.log("複製聊天室內容成功");
+          // 複製聊天室文字
+          clipboard.writeText(args[1].replace(/^(\r\n|\n|\r|\t| )+/gm, ""));
+        }else{
+          clipboard.writeText(args[1]);
         }
       }
     }

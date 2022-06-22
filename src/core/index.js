@@ -19,13 +19,18 @@ var check_timer = reInterval(function(){
             if(me.id != ""){
                 get.gameflow();
                 if(gameflow_ReadyCheck){ // 狀態
-                    console.log("設定狀態: " + settings.accept_checkbox)
+                    //console.log("設定狀態: " + settings.accept_checkbox)
                     if(settings.accept_checkbox){ // 設定
                         post.matchmaking_accept();
                     }else{
                         ml_main.webContents.send("game_status", gameflow + " | 對戰已匹配等待接受中...");
                         console.log("[INFO] 對戰已匹配等待接受中...");
                     }
+                }
+                if(gameflow_ChampSelect){
+                    get.select_champion_msg();
+                    ml_main.webContents.send("champselect_chat", champselect.chat_body); // 從這邊發送的話有助於在其他頁面也可以發送資料
+                    //get.select_champion_data();
                 }
             }
         }
