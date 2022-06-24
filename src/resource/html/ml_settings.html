@@ -142,6 +142,12 @@
                   <span class="links_name">刪除紀錄檔</span>
                 </a>
               </li>
+              <li id="kill_lolrender">
+                <a href="javascript:onKill_lolrender();">
+                  <i class="material-icons">refresh</i>
+                  <span class="links_name">重啟客戶端</span>
+                </a>
+              </li>
             </ul>
             
             <!-- 讓按鈕有用吧! -->
@@ -159,6 +165,10 @@
 
               function onCleanlog(){
                 window.api.send("toMain","Clean_log");
+              }
+
+              function onKill_lolrender(){
+                window.api.send("toMain","kill_lolrender");
               }
 
               function accept_checkbox_event(vaule){

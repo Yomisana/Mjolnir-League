@@ -6,6 +6,7 @@ const {app, BrowserWindow, ipcMain, Tray, Menu, shell , clipboard} = require('el
 const instanceLock = app.requestSingleInstanceLock();
 const electronLogger = require('electron-log');
 const {autoUpdater} = require("electron-updater");
+const exec = require('child_process').exec;
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -173,6 +174,13 @@ app.whenReady().then(() => {
       $.closeApp();
     }else if(args == "sversion"){
       ml_main.webContents.send("software_version", software_version);
+    }else if(args == "kill_lolrender"){
+      exec('taskkill /f /im LeagueClientUxRender.exe',function (error, stdout, stderr) {
+        //console.log(stdout);
+        console.log("[INFO] 發送結束客戶端渲染畫面程序完畢!");
+        if(error)
+          console.error("[ERROR] " + error);
+      });
     }else if(args == "Clean_log"){
       fs.readdir(path.join(log_dir), (err, files) => {
         if (err) {
