@@ -35,7 +35,7 @@
                 //$('#champselect_chat').text(data);// span normal
               }
             }else{
-              localStorage.setItem('champselect_chat_data', "");
+              localStorage.setItem('champselect_chat_data', "等待再次選角中...");
               $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
             }
             //$('#champselect_chat').text(data);// span normal
@@ -127,8 +127,12 @@
         <div class="body_content">
           <!-- <div class="text">Chat</div> -->
           <!-- <span style="color:white;">還在開發中...敬請期待</span> -->
-          <span style="color:white;">選角聊天室窗:</span><a href="javascript:champselect_chatToClipBoard();"><i class="material-icons" id="summoner_name_copy">content_copy</i></a><br>
+          <span style="color:white;">選角聊天室窗:</span><a href="javascript:champselect_chatToClipBoard();"><i class="material-icons" id="champselect_chat_copy">content_copy</i></a><br>
           <span style="color:white" id="champselect_chat"></span><br>
+
+          <span style="color:white;">遊戲內聊天室窗:</span><a href="javascript:gaming_chatToClipBoard();"><i class="material-icons" id="gaming_chat_copy">content_copy</i></a><br>
+          <span style="color:white;">開發中...敬請期待...</span>
+          <span style="color:white" id="gaming_chat"></span><br>
           <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
         </div>
 

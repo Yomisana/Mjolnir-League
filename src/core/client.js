@@ -28,32 +28,10 @@ const $ = {
                     });
                 }
             }else{
-                ml_main.webContents.send("client_is_found", client_status[0]);
-                // summoner
-                ml_main.webContents.send("summoner_name", "Waiting...");
-                ml_main.webContents.send("summoner_level", "Waiting...");
-                ml_main.webContents.send("summoner_status", "Waiting...");
-                ml_main.webContents.send("summoner_status_message", "Waiting...");
-                ml_main.webContents.send("summoner_masteryScore", "Waiting...");
-                ml_main.webContents.send("summoner_region", "Waiting...");
-                ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
-                ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
-                // game status
-                ml_main.webContents.send("game_status", "Waiting...");
+                $.clear_ipc();
                 if(client_is_notfound == false){
                     console.log('[INFO] 尚未找到 LOL 客戶端' + "\n");
-                    // ml_main.webContents.send("client_is_found", client_status[0]);
-                    // // summoner
-                    // ml_main.webContents.send("summoner_name", "Waiting...");
-                    // ml_main.webContents.send("summoner_level", "Waiting...");
-                    // ml_main.webContents.send("summoner_status", "Waiting...");
-                    // ml_main.webContents.send("summoner_status_message", "Waiting...");
-                    // ml_main.webContents.send("summoner_masteryScore", "Waiting...");
-                    // ml_main.webContents.send("summoner_region", "Waiting...");
-                    // ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
-                    // ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
-                    // // game status
-                    // ml_main.webContents.send("game_status", "Waiting...");
+                    $.clear_ipc();
                     client_is_found = false;client_is_notfound = true;is_lockfile_get = false;
                     console.log("[INFO] Clean Data");
                     client_path = null;
@@ -71,8 +49,6 @@ const $ = {
                     me.platformId = null;me.puuid = null;me.statusMessage = null;
                     me.summonerId = null;gameflow = null;
                     gameflow_ReadyCheck = false;gameflow_ChampSelect = false;
-                    gameflow_ChampSelectSpoken = false;conversations_id_get = false;
-                    conversations_id = null;
                     console.log("[INFO] Clean Data Done!");
                 }
             }
@@ -82,7 +58,7 @@ const $ = {
         fs.readFile(client_dir + '/lockfile', 'utf8', (err, data) => {
             try{
                 lockfile_str = data;
-                console.log("[INFO] "+ lockfile_str + "\n");
+                //console.log("[INFO] "+ lockfile_str + "\n");
                 lockfile = lockfile_str?.split(':');
                 // lockfile 
                 client_lockfile.lockfile_name =  lockfile[0];
@@ -94,14 +70,14 @@ const $ = {
                 var tmp_token = "riot:" + lockfile[3];
                 var encode_token = base64.encode(tmp_token);
                 client_lockfile.lockfile_token = "Basic " + encode_token
-                console.log("[INFO] Token:" + client_lockfile.lockfile_token);
+                // console.log("[INFO] Token:" + client_lockfile.lockfile_token);
     
-                console.log("\n",client_lockfile.lockfile_name,"\n",client_lockfile.lockfile_pid,"\n",client_lockfile.lockfile_port,"\n",client_lockfile.lockfile_token,"\n",client_lockfile.lockfile_method,);
-                console.log("[INFO] LOL lockfile Done!");
+                // console.log("\n",client_lockfile.lockfile_name,"\n",client_lockfile.lockfile_pid,"\n",client_lockfile.lockfile_port,"\n",client_lockfile.lockfile_token,"\n",client_lockfile.lockfile_method,);
+                console.log("[INFO] LOL lockfile extraction done!");
     
                 url_prefix = client_lockfile.lockfile_method + "://127.0.0.1:" + client_lockfile.lockfile_port;
-                console.log("[INFO] Url:" + url_prefix);
-                console.log("[INFO] LOL url Done!\n");
+                console.log("[INFO] api url:" + url_prefix);
+                console.log("[INFO] LOL api url extraction done!\n");
                 game_is_notfound = false; is_lockfile_get = true;
             }catch(error){
                 client_is_found = false;client_is_notfound = false;is_lockfile_get = false;
@@ -113,7 +89,7 @@ const $ = {
     },
     is_game_running: function(){
         find('name', 'League of Legends', true).then(function (process_list) {
-            console.log("我有偷跑");
+            //console.log("我有偷跑");
             if(process_list.length != 0){ // 代表有開 LOL
                 if(!game_is_found){
                     console.log("[INFO] 遊戲端有開著!");
@@ -126,6 +102,22 @@ const $ = {
                 }
             }
         });
+    },
+    clear_ipc: function(){
+        ml_main.webContents.send("client_is_found", client_status[0]);
+        // summoner
+        ml_main.webContents.send("summoner_name", "Waiting...");
+        ml_main.webContents.send("summoner_level", "Waiting...");
+        ml_main.webContents.send("summoner_status", "Waiting...");
+        ml_main.webContents.send("summoner_status_message", "Waiting...");
+        ml_main.webContents.send("summoner_masteryScore", "Waiting...");
+        ml_main.webContents.send("summoner_region", "Waiting...");
+        ml_main.webContents.send("summoner_wallet_ip", "Waiting...");
+        ml_main.webContents.send("summoner_wallet_rp", "Waiting...");
+        // game status
+        ml_main.webContents.send("game_status", "Waiting...");
+        // summoner chat
+        ml_main.webContents.send("champselect_chat", "");
     }
 }
 

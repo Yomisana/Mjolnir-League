@@ -173,6 +173,19 @@ app.whenReady().then(() => {
       $.closeApp();
     }else if(args == "sversion"){
       ml_main.webContents.send("software_version", software_version);
+    }else if(args == "Clean_log"){
+      fs.readdir(path.join(log_dir), (err, files) => {
+        if (err) {
+          console.error("[ERROR - Clean log] "+err);
+        }
+        for (const file of files) {
+          fs.unlink(path.join(log_dir, file), err => {
+            if (err) {
+              console.error("[ERROR - Ready Clean log] "+err);
+            }
+          });
+        }
+      });
     }else if(Array.isArray(args)){
       if(args[0] == "accept_checkbox"){
         if(args[1]){

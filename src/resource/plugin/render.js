@@ -1,3 +1,5 @@
+// 準備棄用...
+
 // window.api.receive("software_version", (data)=>{
 //     $('#software_version').text(data);
 // });

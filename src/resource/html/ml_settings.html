@@ -127,12 +127,23 @@
             <span style="color:white;">全區域設定</span>
             <div class="switch"><!-- 按鈕區 -->
               <input type="checkbox" class="accept_checkbox" id="accept_checkbox" onchange="accept_checkbox_event(this)">
-              <!-- <label><input type="checkbox" class="accept_checkbox" id="accept_checkbox" name="" value="">自動接受對戰</label> -->
               <label>自動接受對戰</label>
               <span class="accept_checkbox_background"></span>
               <span class="accept_checkbox_circle"></span>
             </div>
+            <!-- 暫時 - 設定 -->
+            <br><span style="color:white;">更新資料頻率</span>
 
+            <br><span style="color:white;">其他小功能</span><br>
+            <ul class="nav_list">
+              <li id="cleanlog">
+                <a href="javascript:onCleanlog();">
+                  <i class="material-icons">delete</i>
+                  <span class="links_name">刪除紀錄檔</span>
+                </a>
+              </li>
+            </ul>
+            
             <!-- 讓按鈕有用吧! -->
             <script type="text/javascript">
               let menu_btn = document.querySelector("#menu_btn");
@@ -143,7 +154,11 @@
               }
 
               function oncloseapp(){
-                    window.api.send("toMain","closeapp");
+                window.api.send("toMain","closeapp");
+              }
+
+              function onCleanlog(){
+                window.api.send("toMain","Clean_log");
               }
 
               function accept_checkbox_event(vaule){
