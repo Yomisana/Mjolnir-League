@@ -130,9 +130,6 @@ global.refresh_check_path_timer = { // check lol client path timer
     global.gameflow = null;
     global.gameflow_ReadyCheck = false;
     global.gameflow_ChampSelect = false;
-    global.gameflow_ChampSelectSpoken = false; // spam message
-    global.conversations_id_get = false;
-    global.conversations_id = null;
     global.wallet = {
         ip: 0, // 藍粉(ip)
         rp: 0  // 聯盟幣(rp)
@@ -142,7 +139,12 @@ global.refresh_check_path_timer = { // check lol client path timer
         xpUntilNextLevel: 0, // 升級的經驗值
     }
     global.battle = {
-       player_count: 0,
+        players_num: 0, // 對戰上召喚師數量
+        myteam_num: 0, // 我方召喚師數量
+        enemyteam_num: 0, // 敵方召喚師數量
+        cell_id: [], // actions 對應 myTeam or theirTeam find...
+        final_data: [],
+        
     }
     global.champselect = {
         histroy_msgid: null,

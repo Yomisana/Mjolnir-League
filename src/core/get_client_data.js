@@ -76,15 +76,15 @@ const $ = {
                 try{
                     gameflow = body.replace(/[^A-Z0-9]/ig,"");
                     if(gameflow == "None"){
-                        gameflow_ChampSelect = false;conversations_id_get = false;
-                        //gameflow_ChampSelectSpoken = false;
-                        conversations_id = null;
+                        gameflow_ChampSelect = false;
+                        $.clear_select_champion_msg();// chat page reset
                         ml_main.webContents.send("game_status", gameflow + " | 你目前可能在首頁或是選擇模式大廳");
                     }else if(gameflow == "Lobby"){
                         gameflow_ReadyCheck = false;
-                        gameflow_ChampSelect = false;conversations_id_get = false;
-                        //gameflow_ChampSelectSpoken = false;
-                        conversations_id = null;
+                        gameflow_ChampSelect = false;
+
+                        $.clear_select_champion_msg();// chat page reset
+                        
                         if(me.lol.gameQueueType == "NORMAL"){
                             ml_main.webContents.send("game_status", gameflow + " | 一般盲選對戰房間");
                         }else if(me.lol.gameQueueType == "RANKED_SOLO_5x5"){
@@ -115,11 +115,7 @@ const $ = {
                     }else if(gameflow == "Matchmaking"){
                         gameflow_ReadyCheck = false;
                         
-                        // chat page reset
-                        champselect.histroy_msgid = null;champselect.msg_id = null;
-                        champselect.chat_id = 0;champselect.chat_msg = [];
-                        champselect.chat_msg_timestamp = [];champselect.chat_body = [];
-                        ml_main.webContents.send("champselect_chat", '');
+                        $.clear_select_champion_msg();// chat page reset
 
                         if(me.lol.gameQueueType == "NORMAL"){
                             ml_main.webContents.send("game_status", gameflow + " | 匹配一般盲選");
@@ -152,9 +148,7 @@ const $ = {
                         // ml_main.webContents.send("game_status", gameflow + " | 對戰正在自動接受中...");
                         // console.log("[INFO] 傳送自動接受資訊中...");
                         gameflow_ReadyCheck = true;
-                        gameflow_ChampSelect = false;conversations_id_get = false;
-                        //gameflow_ChampSelectSpoken = false;
-                        conversations_id = null;
+                        gameflow_ChampSelect = false;
                     }else if(gameflow == "ChampSelect"){
                         gameflow_ReadyCheck = false;
                         if(me.lol.gameQueueType == "NORMAL"){
@@ -195,14 +189,9 @@ const $ = {
                             ml_main.webContents.send("game_status", gameflow + " | 你目前正在普羅找不到的地方選擇英雄腳色中?? 這...你辦不到的!! 伺服器是不是炸了?");
                         }
                     }else if(gameflow == "InProgress"){
-                        gameflow_ChampSelect = false;conversations_id_get = false;
-                        conversations_id = null;//gameflow_ChampSelectSpoken = false;
-
-                        // chat page reset
-                        champselect.histroy_msgid = null;champselect.msg_id = null;
-                        champselect.chat_id = 0;champselect.chat_msg = [];
-                        champselect.chat_msg_timestamp = [];champselect.chat_body = [];
-                        ml_main.webContents.send("champselect_chat", '');
+                        gameflow_ChampSelect = false;
+                        
+                        $.clear_select_champion_msg();// chat page reset
                         
                         ml_main.webContents.send("game_status", gameflow + " | 遊玩中...");
                     }else if(gameflow == "Reconnect"){
@@ -217,8 +206,7 @@ const $ = {
                     console.error("[ERROR - get_status] "+error);
                     client_is_found = false;
                     game_is_found = false;game_is_notfound = true;gameflow_ReadyCheck = false;
-                    gameflow_ChampSelect = false;conversations_id_get = false;
-                    conversations_id = null;//gameflow_ChampSelectSpoken = false;
+                    gameflow_ChampSelect = false;
                 }
             }
         );
@@ -296,25 +284,51 @@ const $ = {
             function(err, httpResponse, body){
                 try{
                     var data = JSON.parse(body);
-                    //console.log("[DEBUG - champion_data] " + data);
-                    battle.player_count = data.actions[0].length;
-                    console.log("加入對戰召喚師數量：" + battle.player_count);
-                    console.log("選擇角色資訊:");
-                    for(var i = 0; i < battle.player_count; i++){
-                        // Unit
+                    /*
+                        先從 查看 data.actions 有多少個再來推估(以actions為基準)
+                        取的召喚師人數後 再來把各個 actions 召喚師的id 對應到 myTeam or theirTeam 尋找各個召喚師的 data 資料
+                        但這裡沿生出一個問題是 你還要做判斷是去處理 所以這個是行不通的 除非反向搜尋
 
-                        console.log(`第${i+1}位召喚師`);
-                        console.log("actions:");
-                        console.log("   資料對應ID:" + data.actions[0][i].actorCellId);
-                        //console.log("   Global 資料對應ID:" + battle.actions.actions.actorCellId[i]);
-                        console.log("   已選取選定的角色(id): " + data.actions[0][i].championId);
-                        console.log("   已鎖定角色?: " + data.actions[0][i].completed);
-                        console.log("   在Acrions第幾個資料: " + data.actions[0][i].id);
-                        console.log("   是盟友行動(已知 Bot:false): " + data.actions[0][i].isAllyAction);
-                        console.log("   是否還在客戶端上(目前知道鎖角後就會變成 false 但也有可能是所有人鎖角後才會變 false): " + data.actions[0][i].isInProgress);
-                        console.log("   pickTurn(未知作用): " + data.actions[0][i].pickTurn);
-                        console.log("   type(未知作用): " + data.actions[0][i].type);
+                        從 myTeam or theirTeam 反向搜索 actions...
+                        那為什麼 直接拿到 myTeam or theirTeam 的各個召喚師資料我還要 反向搜索 actions ? 因為我們需要 actions 上的 completed(已鎖角這個判斷值) 、 isInProgress(意旨的是 配符文那個階段 就要準備啟動遊戲端了 所以來判斷你是否還在客戶端上 這個沒啥關聯 :P) 
+                     */
+                    //console.log(data);
+
+
+                    battle.players_num = data.actions[0].length; // 對戰上召喚師數量
+                    battle.myteam_num = data.myTeam.length; // 我方召喚師數量
+                    battle.enemyteam_num = data.theirTeam.length; // 敵方召喚師數量
+
+                    console.log(`對戰玩家人數(對戰召喚師人數): ${battle.players_num}`);
+                    console.log(`我方召喚師數量:${battle.myteam_num}`);
+                    console.log(`敵方召喚師數量:${battle.enemyteam_num}`);
+                    // 二維陣列(actions)
+                    for(var i = 0; i<battle.players_num; i++){
+                        battle.cell_id.push(data.actions[0][i].actorCellId);
+                        console.log(`cellID(actions):${battle.cell_id[i]}`);
                     }
+                    // battle.cell_id.push(data.actions[0][battle.players_num].actorCellId);
+                    // console.log(`cellID(actions):${data.actions[0][battle.players_num].actorCellId}`);
+                    
+                    //console.log("[DEBUG - champion_data] " + data);
+                    // battle.player_count = data.actions[0].length;
+                    // console.log("加入對戰召喚師數量：" + battle.player_count);
+                    // console.log("選擇角色資訊:");
+                    // for(var i = 0; i < battle.player_count; i++){
+                    //     // Unit
+
+                    //     console.log(`第${i+1}位召喚師`);
+                    //     console.log("actions:");
+                    //     console.log("   資料對應ID:" + data.actions[0][i].actorCellId);
+                    //     //console.log("   Global 資料對應ID:" + battle.actions.actions.actorCellId[i]);
+                    //     console.log("   已選取選定的角色(id): " + data.actions[0][i].championId);
+                    //     console.log("   已鎖定角色?: " + data.actions[0][i].completed);
+                    //     console.log("   在Acrions第幾個資料: " + data.actions[0][i].id);
+                    //     console.log("   是盟友行動(已知 Bot:false): " + data.actions[0][i].isAllyAction);
+                    //     console.log("   是否還在客戶端上(目前知道鎖角後就會變成 false 但也有可能是所有人鎖角後才會變 false): " + data.actions[0][i].isInProgress);
+                    //     console.log("   pickTurn(未知作用): " + data.actions[0][i].pickTurn);
+                    //     console.log("   type(未知作用): " + data.actions[0][i].type);
+                    // }
                     // console.log("actions:");
                     // console.log("   資料對應ID:" + data.actions[0][0].actorCellId);
                     // console.log("   已選取選定的角色(id): " + data.actions[0][0].championId);
@@ -383,25 +397,7 @@ const $ = {
                                     //ml_main.webContents.send("champselect_chat", champselect.chat_body); // 改到 index 
                                     champselect.chat_id = champselect.chat_id + 1 ;
                                 }
-                                // if(gameflow_ChampSelect){
-                                //     // console.log("顯示聊天室資訊...");
-                                // }else{
-                                //     console.log("清除Chat頁面...");
-                                // }
-                                
-                                //console.log("====================");
                             }
-
-                            //console.log(JSON.stringify(data)); // print out championSelect data
-                            // console.log("[select_champion_msg] 當前的訊息ID: " + data.lastMessage.id);
-                            
-                            
-                            
-                            //unit.message(data.lastMessage.id);
-                            //console.log("紀錄的訊息ID: " + lastmessage_id);
-                            // if(lastmessage_id != data.lastMessage.id){
-                            //     //ml_main.webContents.send("summoner_level", me.lol.level + `(${summoner_info.xpSinceLastLevel} / ${summoner_info.xpUntilNextLevel})`);
-                            // }
                         }
                     }
 
@@ -410,6 +406,16 @@ const $ = {
                 }
             }
         );
+    },
+    clear_select_champion_msg: function(){
+        // chat page reset
+        champselect.histroy_msgid = null;champselect.msg_id = null;
+        champselect.chat_id = 0;champselect.chat_msg = [];
+        champselect.chat_msg_timestamp = [];champselect.chat_body = [];
+        ml_main.webContents.send("champselect_chat", '');
+    },
+    get_other_summoner_name: function(){
+
     }
 }
 

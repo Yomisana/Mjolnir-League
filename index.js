@@ -18,8 +18,8 @@ const $ = { // 已完成不需要變更
           process.kill(pid);
           pid = 0;
       }
-      app.quit();
-      process.exit(1);
+      //app.quit(); //沒有真的退出 修復 bug
+      process.exit();
     },
     taskbar: async function(win){
         let type = (process.platform == "darwin")?'png':'ico';
@@ -239,11 +239,11 @@ app.whenReady().then(() => {
 
 // 額外設定
 // 程式所有視窗確定關閉後關閉現程
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      $.closeApp();
-    }
-});
+// app.on('window-all-closed', () => {
+//     if (process.platform !== 'darwin') {
+//       $.closeApp();
+//     }
+// });
 
 // 單一處理程序鎖定，有兩個以上的處理程序時，強制關閉最後開啟的那個
 if(!instanceLock)
