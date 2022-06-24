@@ -130,16 +130,9 @@ global.refresh_check_path_timer = { // check lol client path timer
     global.gameflow = null;
     global.gameflow_ReadyCheck = false;
     global.gameflow_ChampSelect = false;
-    global.gameflow_ChampSelectSpoken = false;
+    global.gameflow_ChampSelectSpoken = false; // spam message
     global.conversations_id_get = false;
     global.conversations_id = null;
-    global.postMessage = {
-                // 0     1    2    3     4    5      6    7      8      9     10     11
-        message: ["top","jg","ap","ad","sup","mid","adc","上路","打野","中路","下路","輔助"],
-        times: 2,
-        is_system_chat: false,
-        type: ["celebration","chat"]
-    }
     global.wallet = {
         ip: 0, // 藍粉(ip)
         rp: 0  // 聯盟幣(rp)
@@ -147,6 +140,25 @@ global.refresh_check_path_timer = { // check lol client path timer
     global.summoner_info = {
         xpSinceLastLevel: 0, // 當前經驗值
         xpUntilNextLevel: 0, // 升級的經驗值
+    }
+    global.battle = {
+       player_count: 0,
+    }
+    global.champselect = {
+        histroy_msgid: null,
+        msg_id: null,
+        // msg array
+        chat_id: 0, // 給自己檢查用的
+        chat_msg: [],
+        chat_msg_timestamp: [],
+        chat_body: []
+    }
+    global.postMessage = {
+                // 0     1    2    3     4    5      6    7      8      9     10     11
+        message: ["top","jg","ap","ad","sup","mid","adc","上路","打野","中路","下路","輔助"],
+        times: 2,
+        is_system_chat: false,
+        type: ["celebration","chat"]
     }
 
 // Logger

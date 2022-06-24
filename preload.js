@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld(
                 "game_status",
                 "summoner_wallet_ip",
                 "summoner_wallet_rp",
+                "champselect_chat",
             ];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 

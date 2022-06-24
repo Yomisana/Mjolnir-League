@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <title>Mjolnir League</title>
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-        <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
+        <link href="../css/ml_summoner_chat.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
 
         <!-- Google Icons -->
@@ -14,7 +14,32 @@
 
         <!-- 本地儲存資料 -->
         <script>
+          window.api.receive("champselect_chat", (data)=>{
+            //console.log(data.length);
+            // var data = localStorage.getItem('champselect_chat_data');
+            // const msg_data = data.split(',');
+            // $('#champselect_chat').text(msg_data[0] + "\n");data.length
 
+            // localStorage.setItem('champselect_chat_data',msg_data);
+            // $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
+            if(data){
+              for (i = 0; i< data.length; i++) {
+              var x =  data[i];
+              if(i != 0){
+                var msg = msg + x + "\n  ";
+              }else{
+                var msg = x + "\n  ";
+              }
+              localStorage.setItem('champselect_chat_data',msg);
+              $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
+              //$('#champselect_chat').text(data);// span normal
+            }
+            }else{
+              localStorage.setItem('champselect_chat_data', "");
+              $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
+            }
+            //$('#champselect_chat').text(data);// span normal
+          });
 
           // sidebar
           window.api.receive("client_is_found", (data)=>{
@@ -24,7 +49,7 @@
           });
 
           function load(){
-
+            $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
           }
@@ -101,9 +126,10 @@
         <!-- body: 頁面內容 -->
         <div class="body_content">
           <div class="text">Chat</div>
-          <span style="color:white;">還在開發中...敬請期待</span>
-          <!-- <span style="color:white;">伺服器地區:</span><span style="color:white" id="summoner_region"></span><br>
-          <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
+          <!-- <span style="color:white;">還在開發中...敬請期待</span> -->
+          <span style="color:white;">選角聊天室窗:</span><a href="javascript:champselect_chatToClipBoard();"><i class="material-icons" id="summoner_name_copy">content_copy</i></a><br>
+          <span style="color:white" id="champselect_chat"></span><br>
+          <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
         </div>
 
         <!-- 讓按鈕有用吧! -->
@@ -113,6 +139,11 @@
 
           menu_btn.onclick = function(){
             sidebar.classList.toggle("active");
+          }
+
+          function champselect_chatToClipBoard() {
+            var span_Text = document.getElementById("champselect_chat").innerText;
+            window.api.send("toMain",['champselect_chat_copy', span_Text]); // 後端
           }
 
           function oncloseapp(){
