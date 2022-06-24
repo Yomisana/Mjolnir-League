@@ -3,11 +3,9 @@
 [![Releases Download Count](https://img.shields.io/github/downloads/Yomisana/Mjolnir-League/total.svg)](https://github.com/Yomisana/Mjolnir-League/releases/latest)
 [![Releases version](https://img.shields.io/github/v/release/yomisana/Mjolnir-League)](https://github.com/Yomisana/Mjolnir-League/releases/latest)
 
-
 [![GitHub - Yomisana](https://img.shields.io/static/v1?style=for-the-badge&message=GitHub&color=181717&logo=GitHub&logoColor=FFFFFF&label=yomisana)](https://github.com/Yomisana/)
 [![GitHub - Yomisana/Mjolnir-League](https://img.shields.io/static/v1?style=for-the-badge&message=GitHub&color=181717&logo=GitHub&logoColor=FFFFFF&label=yomisana/Mjolnir-League)](https://github.com/Yomisana/Mjolnir-League)
 [![Discord](https://img.shields.io/static/v1?style=for-the-badge&message=Discord&color=5865F2&logo=Discord&logoColor=FFFFFF&label=Mjolnir)](https://discord.gg/RmB9vXukbq)
-
 
 [![Electron](https://img.shields.io/static/v1?style=for-the-badge&message=Electron&color=47848F&logo=Electron&logoColor=FFFFFF&label=)](https://www.electronjs.org/)
 [![Windows](https://img.shields.io/static/v1?style=for-the-badge&message=Windows&color=0078D6&logo=Windows&logoColor=FFFFFF&label=7/8/8.1/10/11)](https://www.microsoft.com/zh-tw/)
