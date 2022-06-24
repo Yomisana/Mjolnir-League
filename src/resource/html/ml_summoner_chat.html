@@ -24,6 +24,7 @@
             // $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
             if(data){
               for (i = 0; i< data.length; i++) {
+<<<<<<< HEAD
                 var x =  data[i];
                 if(i != 0){
                   var msg = msg + x + "\n  ";
@@ -34,6 +35,18 @@
                 $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
                 //$('#champselect_chat').text(data);// span normal
               }
+=======
+              var x =  data[i];
+              if(i != 0){
+                var msg = msg + x + "\n  ";
+              }else{
+                var msg = x + "\n  ";
+              }
+              localStorage.setItem('champselect_chat_data',msg);
+              $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
+              //$('#champselect_chat').text(data);// span normal
+            }
+>>>>>>> ddb22a07c71d4c12897105ade53715b32314ceb0
             }else{
               localStorage.setItem('champselect_chat_data', "");
               $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
@@ -125,7 +138,11 @@
         </div>
         <!-- body: 頁面內容 -->
         <div class="body_content">
+<<<<<<< HEAD
           <!-- <div class="text">Chat</div> -->
+=======
+          <div class="text">Chat</div>
+>>>>>>> ddb22a07c71d4c12897105ade53715b32314ceb0
           <!-- <span style="color:white;">還在開發中...敬請期待</span> -->
           <span style="color:white;">選角聊天室窗:</span><a href="javascript:champselect_chatToClipBoard();"><i class="material-icons" id="summoner_name_copy">content_copy</i></a><br>
           <span style="color:white" id="champselect_chat"></span><br>

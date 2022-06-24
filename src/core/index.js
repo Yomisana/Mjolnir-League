@@ -30,7 +30,11 @@ var check_timer = reInterval(function(){
                 if(gameflow_ChampSelect){
                     get.select_champion_msg();
                     ml_main.webContents.send("champselect_chat", champselect.chat_body); // 從這邊發送的話有助於在其他頁面也可以發送資料
+<<<<<<< HEAD
                     get.select_champion_data();
+=======
+                    //get.select_champion_data();
+>>>>>>> ddb22a07c71d4c12897105ade53715b32314ceb0
                 }
             }
         }
