@@ -18,6 +18,15 @@ body{
   /* overflow: hidden; */
 }
 
+.hr-solid {
+    border: 1px solid #7a756d;
+    width: 50%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    /* margin-right: 10%; */
+}
+
 .sidebar{
   position: fixed;
   top: 0;
@@ -329,15 +338,40 @@ body{
           transition: All 0.3s ease;
 }
 
+/* 調度更新頻率 */
+.body_content .refresh{
+  margin-left: 5px;
+}
+
+.body_content .refresh label{
+  color: white;
+  white-space:nowrap;
+  position: relative;
+  top: 2px;
+  left: 5px;
+}
+
+/* .body_content .refresh #api_refresh #find_refresh{ */
+.body_content .refresh input{
+  position: relative;
+  height: 30px; /* 按鈕背景高度 */
+  width: 90px; /* 按鈕背景寬度 */
+  margin: 0 5px;
+  list-style: none;
+  line-height: 30px;
+  border-radius: 5px;
+}
+
 
 /* 底部 按鈕 */
-.body_content ul{
-  margin-top: 20px;
+.body_content .nav_list{
+  margin-left: 5px;
+  margin-top: 10px;
 }
 
 
 /* 刪除記錄檔按鈕 */
-.body_content ul #cleanlog{
+.body_content .nav_list #cleanlog{
   position: relative;
   height: 30px; /* 按鈕背景高度 */
   width: 175px; /* 按鈕背景寬度 */
@@ -347,7 +381,7 @@ body{
   border-radius: 12px;
 }
 
-.body_content ul #cleanlog a{
+.body_content .nav_list #cleanlog a{
   color: white;
   display: flex;
   align-items: center;
@@ -361,18 +395,18 @@ body{
   border-width: 2px;
 }
 
-.body_content ul #cleanlog a:hover{
+.body_content .nav_list #cleanlog a:hover{
   color: white;
   background: #54504b;
 }
 
-.body_content ul #cleanlog a i{
+.body_content .nav_list #cleanlog a i{
   /* icon location */
   height: 50px;
   line-height: 50px;
   /* 圖示與文字間距 */
   /* min-width: 20px; */
-  border-radius: 12px; 
+  border-radius: 12px;
   text-align: center;
   position: relative;
   left: 5px;
@@ -380,7 +414,7 @@ body{
 }
 
 /* 重啟客戶端 */
-.body_content ul #kill_lolrender{
+.body_content .nav_list #kill_lolrender{
   position: relative;
   height: 30px; /* 按鈕背景高度 */
   width: 175px; /* 按鈕背景寬度 */
@@ -392,7 +426,7 @@ body{
   left: 185px;
 }
 
-.body_content ul #kill_lolrender a{
+.body_content .nav_list #kill_lolrender a{
   color: white;
   display: flex;
   align-items: center;
@@ -406,20 +440,40 @@ body{
   border-width: 2px;
 }
 
-.body_content ul #kill_lolrender a:hover{
+.body_content .nav_list #kill_lolrender a:hover{
   color: white;
   background: #54504b;
 }
 
-.body_content ul #kill_lolrender a i{
+.body_content .nav_list #kill_lolrender a i{
   /* icon location */
   height: 50px;
   line-height: 50px;
   /* 圖示與文字間距 */
   /* min-width: 20px; */
-  border-radius: 12px; 
+  border-radius: 12px;
   text-align: center;
   position: relative;
   left: 5px;
   padding-left: 5px;
+}
+
+/* 關於軟體 */
+/* LOGO 大小 */
+.body_content .logo #local_logo {
+  width:64px;
+  height:64px;
+}
+/* LOGO 與 LOGO text */
+.body_content .logo{
+  color: white;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  pointer-events: none;
+}
+
+.body_content .logo .logo_name{
+  font-size: 30px;
 }

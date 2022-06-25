@@ -7,6 +7,18 @@ const post = require('./post_client_data');
 
 var reInterval = require('reinterval');
 
+const $ = {
+    refresh_time: function(){
+        console.log("當前度調頻率(Open):" + refresh_check_path_timer.open);
+        console.log("當前度調頻率(Close):" + refresh_check_path_timer.close);
+        check_timer.reschedule(refresh_check_path_timer.open);
+        check_timer.reschedule(refresh_check_path_timer.close);
+        console.log("度調頻率設定完成");
+        ml_main.webContents.send("setapi_refresh", refresh_check_path_timer.open / 1000);
+        ml_main.webContents.send("setfind_refresh", refresh_check_path_timer.close / 1000);
+    }
+}
+
 var check_timer = reInterval(function(){
     if(client_is_found){
         //ml_main.webContents.send("client_is_found", client_status[1]);
@@ -40,3 +52,5 @@ var check_timer = reInterval(function(){
         check_timer.reschedule(refresh_check_path_timer.close);
     }
 }, 1000) // default timer is not change de
+
+module.exports = $;

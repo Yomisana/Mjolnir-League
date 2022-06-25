@@ -9,6 +9,9 @@
 
 [![Electron](https://img.shields.io/static/v1?style=for-the-badge&message=Electron&color=47848F&logo=Electron&logoColor=FFFFFF&label=)](https://www.electronjs.org/)
 [![Windows](https://img.shields.io/static/v1?style=for-the-badge&message=Windows&color=0078D6&logo=Windows&logoColor=FFFFFF&label=7/8/8.1/10/11)](https://www.microsoft.com/zh-tw/)
+# 軟體成就
+- 感謝各位的下載
+    - [2022/06/25] 下載次數突破300
 # 功能
 - 電腦端
     - 就和 [Discord](https://discord.com) 一樣不小心關閉視窗也會在系統小圖示列可以找到喔! ✔

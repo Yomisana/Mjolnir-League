@@ -32,23 +32,33 @@
 
           //accept_checkbox
           window.api.receive("accept_checkbox", (data)=>{
-            localStorage.setItem('accept_checkbox',data);
+            localStorage.setItem('accept_checkbox_data',data);
             $('accept_checkbox').text(localStorage.getItem('accept_checkbox_data'));
           });
 
+          // refresh
+          window.api.receive("setapi_refresh", (data)=>{
+            localStorage.setItem('setapi_refresh_data',data);
+            $('#refresh_time').text(`(客戶端:${localStorage.getItem('setapi_refresh_data')?localStorage.getItem('setapi_refresh_data'):'預設'}sec/ 搜尋客戶端:${localStorage.getItem('setfind_refresh_data')?localStorage.getItem('setfind_refresh_data'):'預設'}sec)`);
+          });
+
+          window.api.receive("setfind_refresh", (data)=>{
+            localStorage.setItem('setfind_refresh_data',data);
+            $('#refresh_time').text(`(客戶端:${localStorage.getItem('setapi_refresh_data')?localStorage.getItem('setapi_refresh_data'):'預設'}sec/ 搜尋客戶端:${localStorage.getItem('setfind_refresh_data')?localStorage.getItem('setfind_refresh_data'):'預設'}sec)`);
+          });
+          
           function load(){
             // 版本呼叫提取
             window.api.send("toMain","sversion");
             $('#software_version').text(localStorage.getItem('software_version_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
-
+            // api refresh
+            $('#refresh_time').text(`(客戶端:${localStorage.getItem('setapi_refresh_data')?localStorage.getItem('setapi_refresh_data'):'預設'}sec/ 搜尋客戶端:${localStorage.getItem('setfind_refresh_data')?localStorage.getItem('setfind_refresh_data'):'預設'}sec)`);
             // checkbox
             //console.log(localStorage.getItem("accept_checkbox_data")); debug
             window.api.send('toMain', ['accept_checkbox', (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):'']); // 後端
             document.getElementById("accept_checkbox").checked = (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):''; //前端
-
-
           }
       </script>
     </head>
@@ -123,7 +133,6 @@
         <!-- body: 頁面內容 -->
         <div class="body_content">
           <!-- <div class="text">Settings</div> -->
-            <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
             <span style="color:white;">全區域設定</span>
             <div class="switch"><!-- 按鈕區 -->
               <input type="checkbox" class="accept_checkbox" id="accept_checkbox" onchange="accept_checkbox_event(this)">
@@ -131,10 +140,19 @@
               <span class="accept_checkbox_background"></span>
               <span class="accept_checkbox_circle"></span>
             </div>
-            <!-- 暫時 - 設定 -->
-            <br><span style="color:white;">更新資料頻率</span>
 
-            <br><span style="color:white;">其他小功能</span><br>
+
+            <!-- 更新頻率 - 設定 -->
+            <hr class="hr-solid">
+            <span style="color:white;">調度頻率</span><span style="color:white; font-size: 90%" id="refresh_time">(客戶端:  sec/ 搜尋客戶端: sec)</span>
+            <div class="refresh">
+              <label>客戶端:</label>
+              <input id="api_refresh" type="text" name="" oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="預設: 1 秒" onchange="setapi_refresh()">
+              <label>搜尋客戶端:</label>
+              <input id="find_refresh" type="text" name="" oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="預設: 5 秒" onchange="setfind_refresh()">
+            </div>
+            <!-- <br><span style="color:white;">其他小功能</span><br> -->
+            <hr class="hr-solid">
             <ul class="nav_list">
               <li id="cleanlog">
                 <a href="javascript:onCleanlog();">
@@ -149,7 +167,14 @@
                 </a>
               </li>
             </ul>
-            
+            <hr class="hr-solid">
+            <div class="logo">
+              <img id="local_logo" src="../img/ml-logo.png" alt="image error">
+              <div class="logo_name">Mjolnir League</div>
+            </div>
+            <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
+            <span>開發作者: yomisana</span>
+
             <!-- 讓按鈕有用吧! -->
             <script type="text/javascript">
               let menu_btn = document.querySelector("#menu_btn");
@@ -165,6 +190,18 @@
 
               function onCleanlog(){
                 window.api.send("toMain","Clean_log");
+              }
+
+              function setapi_refresh(){
+                const setapi_refresh_vaule = document.getElementById("api_refresh").value;
+                localStorage.setItem('setapi_refresh_data', setapi_refresh_vaule); // 前端
+                window.api.send('toMain', ['setapi_refresh', setapi_refresh_vaule]); // 後端
+              }
+
+              function setfind_refresh(){
+                const setfind_refresh_vaule = document.getElementById("setfind_refresh").value;
+                localStorage.setItem('setfind_refresh_data', setfind_refresh_vaule); // 前端
+                window.api.send('toMain', ['setfind_refresh', setfind_refresh_vaule]); // 後端
               }
 
               function onKill_lolrender(){

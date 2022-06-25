@@ -35,6 +35,9 @@ contextBridge.exposeInMainWorld(
                 "summoner_wallet_ip",
                 "summoner_wallet_rp",
                 "champselect_chat",
+                "refresh_time",
+                "setapi_refresh",
+                "setfind_refresh",
             ];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 

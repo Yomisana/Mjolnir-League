@@ -2,6 +2,7 @@
 require('./src/core/global');
 
 const {version} = require("./package.json");
+const set = require('./src/core/index');
 const {app, BrowserWindow, ipcMain, Tray, Menu, shell , clipboard} = require('electron');
 const instanceLock = app.requestSingleInstanceLock();
 const electronLogger = require('electron-log');
@@ -222,6 +223,30 @@ app.whenReady().then(() => {
           clipboard.writeText(args[1].replace(/^(\r\n|\n|\r|\t| )+/gm, ""));
         }else{
           clipboard.writeText(args[1]);
+        }
+      }
+
+      if(args[0] == "setapi_refresh"){
+        if(args[1]){
+          console.log("變更客戶端調度頻率:" + (args[1] * 1000));
+          refresh_check_path_timer.open = args[1] * 1000;
+          set.refresh_time();
+        }else{
+          console.log("變更客戶端調度頻率: 預設...");
+          refresh_check_path_timer.open = 1000;
+          set.refresh_time();
+        }
+      }
+
+      if(args[0] == "setfind_refresh"){
+        if(args[1]){
+          console.log("變更搜尋客戶端調度頻率:" + (args[1] * 1000));
+          refresh_check_path_timer.close = args[1] * 1000;
+          set.refresh_time();
+        }else{
+          console.log("變更搜尋客戶端調度頻率: 預設...");
+          refresh_check_path_timer.close = 1000;
+          set.refresh_time();
         }
       }
     }
