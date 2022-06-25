@@ -226,7 +226,7 @@ app.whenReady().then(() => {
         }
       }
 
-      if(args[0] == "setapi_refresh"){
+      if(args[0] == "api_refresh"){
         if(args[1]){
           console.log("變更客戶端調度頻率:" + (args[1] * 1000));
           refresh_check_path_timer.open = args[1] * 1000;
@@ -238,14 +238,14 @@ app.whenReady().then(() => {
         }
       }
 
-      if(args[0] == "setfind_refresh"){
+      if(args[0] == "find_refresh"){
         if(args[1]){
           console.log("變更搜尋客戶端調度頻率:" + (args[1] * 1000));
           refresh_check_path_timer.close = args[1] * 1000;
           set.refresh_time();
         }else{
           console.log("變更搜尋客戶端調度頻率: 預設...");
-          refresh_check_path_timer.close = 1000;
+          refresh_check_path_timer.close = 5000;
           set.refresh_time();
         }
       }

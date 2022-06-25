@@ -37,14 +37,14 @@
           });
 
           // refresh
-          window.api.receive("setapi_refresh", (data)=>{
-            localStorage.setItem('setapi_refresh_data',data);
-            $('#refresh_time').text(`(客戶端:${localStorage.getItem('setapi_refresh_data')?localStorage.getItem('setapi_refresh_data'):'預設'}sec/ 搜尋客戶端:${localStorage.getItem('setfind_refresh_data')?localStorage.getItem('setfind_refresh_data'):'預設'}sec)`);
+          window.api.receive("api_refresh", (data)=>{
+            localStorage.setItem('api_refresh_data',data);
+            $('#refresh_time').text(`(客戶端:${localStorage.getItem('api_refresh_data')?localStorage.getItem('api_refresh_data'):'預設'}秒/ 搜尋客戶端:${localStorage.getItem('find_refresh_data')?localStorage.getItem('find_refresh_data'):'預設'}秒)`);
           });
 
-          window.api.receive("setfind_refresh", (data)=>{
-            localStorage.setItem('setfind_refresh_data',data);
-            $('#refresh_time').text(`(客戶端:${localStorage.getItem('setapi_refresh_data')?localStorage.getItem('setapi_refresh_data'):'預設'}sec/ 搜尋客戶端:${localStorage.getItem('setfind_refresh_data')?localStorage.getItem('setfind_refresh_data'):'預設'}sec)`);
+          window.api.receive("find_refresh", (data)=>{
+            localStorage.setItem('find_refresh_data',data);
+            $('#refresh_time').text(`(客戶端:${localStorage.getItem('api_refresh_data')?localStorage.getItem('api_refresh_data'):'預設'}秒/ 搜尋客戶端:${localStorage.getItem('find_refresh_data')?localStorage.getItem('find_refresh_data'):'預設'}秒)`);
           });
           
           function load(){
@@ -54,7 +54,7 @@
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
             // api refresh
-            $('#refresh_time').text(`(客戶端:${localStorage.getItem('setapi_refresh_data')?localStorage.getItem('setapi_refresh_data'):'預設'}sec/ 搜尋客戶端:${localStorage.getItem('setfind_refresh_data')?localStorage.getItem('setfind_refresh_data'):'預設'}sec)`);
+            $('#refresh_time').text(`(客戶端:${localStorage.getItem('api_refresh_data')?localStorage.getItem('api_refresh_data'):'預設'}秒/ 搜尋客戶端:${localStorage.getItem('find_refresh_data')?localStorage.getItem('find_refresh_data'):'預設'}秒)`);
             // checkbox
             //console.log(localStorage.getItem("accept_checkbox_data")); debug
             window.api.send('toMain', ['accept_checkbox', (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):'']); // 後端
@@ -144,12 +144,12 @@
 
             <!-- 更新頻率 - 設定 -->
             <hr class="hr-solid">
-            <span style="color:white;">調度頻率</span><span style="color:white; font-size: 90%" id="refresh_time">(客戶端:  sec/ 搜尋客戶端: sec)</span>
+            <span style="color:white;">調度頻率</span><span style="color:white; font-size: 90%" id="refresh_time">(客戶端:秒/ 搜尋客戶端:秒)</span>
             <div class="refresh">
               <label>客戶端:</label>
-              <input id="api_refresh" type="text" name="" oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="預設: 1 秒" onchange="setapi_refresh()">
+              <input id="api_refresh" type="text" name="" oninput = "api_refresh_value= api_refresh_value.replace(/[^\d]/g,'')" maxlength="2" placeholder="預設: 1 秒" onchange="api_refresh()">
               <label>搜尋客戶端:</label>
-              <input id="find_refresh" type="text" name="" oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="預設: 5 秒" onchange="setfind_refresh()">
+              <input id="find_refresh" type="text" name="" oninput = "find_refresh_value=find_refresh_value.replace(/[^\d]/g,'')" maxlength="2" placeholder="預設: 5 秒" onchange="find_refresh()">
             </div>
             <!-- <br><span style="color:white;">其他小功能</span><br> -->
             <hr class="hr-solid">
@@ -192,16 +192,16 @@
                 window.api.send("toMain","Clean_log");
               }
 
-              function setapi_refresh(){
-                const setapi_refresh_vaule = document.getElementById("api_refresh").value;
-                localStorage.setItem('setapi_refresh_data', setapi_refresh_vaule); // 前端
-                window.api.send('toMain', ['setapi_refresh', setapi_refresh_vaule]); // 後端
+              function api_refresh(){
+                const api_refresh_vaule = document.getElementById("api_refresh").value;
+                localStorage.setItem('api_refresh_data', api_refresh_vaule); // 前端
+                window.api.send('toMain', ['api_refresh', api_refresh_vaule]); // 後端
               }
 
-              function setfind_refresh(){
-                const setfind_refresh_vaule = document.getElementById("setfind_refresh").value;
-                localStorage.setItem('setfind_refresh_data', setfind_refresh_vaule); // 前端
-                window.api.send('toMain', ['setfind_refresh', setfind_refresh_vaule]); // 後端
+              function find_refresh(){
+                const find_refresh_vaule = document.getElementById("find_refresh").value;
+                localStorage.setItem('find_refresh_data', find_refresh_vaule); // 前端
+                window.api.send('toMain', ['find_refresh', find_refresh_vaule]); // 後端
               }
 
               function onKill_lolrender(){

@@ -41,6 +41,8 @@
 
             // 預設使用者幾乎每次只開這個頁面 不常開設定...
             window.api.send('toMain', ['accept_checkbox', (localStorage.getItem("accept_checkbox_data")=='true')?localStorage.getItem("accept_checkbox_data"):'']); // 後端
+            window.api.send('toMain', ['api_refresh', localStorage.getItem('api_refresh_data')]); // 後端
+            window.api.send('toMain', ['find_refresh', localStorage.getItem('find_refresh_data')]); // 後端
           }
       </script>
     </head>
