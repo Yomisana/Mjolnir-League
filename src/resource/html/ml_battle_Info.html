@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <title>Mjolnir League</title>
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-        <link href="../css/ml_main.css" rel="stylesheet" type="text/css">
+        <link href="../css/ml_summoner_Info.css" rel="stylesheet" type="text/css">
         <script src="../plugin/jquery.min.js"></script>
 	      <script src="../plugin/render.js"></script>
 
@@ -15,10 +15,36 @@
 
         <!-- 本地儲存資料 -->
         <script>
-          window.api.receive("game_status", (data)=>{
-            localStorage.setItem('game_status_data',data);
-            $('#game_status').text(localStorage.getItem('game_status_data'));
-            //$('#game_status').text(data); // span normal
+          window.api.receive("battle_info", (data)=>{
+            //console.log(data.length);
+            var length = data.length;
+            if(data){
+              var msg = "";
+              for(var x = 0; x <length; x += 2 ){
+                var y = data[x] + "\n  " + data[x+1];
+                if(x != 0){
+                  msg = msg + y + "\n  ";
+                }else{
+                  msg = y + "\n  ";
+                }
+                localStorage.setItem('battle_info_data',msg);
+                $('#battle_info').text(localStorage.getItem('battle_info_data'));
+              }
+            }
+            // var msg = "";
+            // for(var x = 0; x < data.length; x += 2 ){
+            //   console.log("共" + x);
+            //   // console.log(data[x] + "\n" + data[x+1]);
+            //   var y = data[x] + "\n" + data[x+1];
+            //   if(x != 0){
+            //     msg = msg + y + "\n  ";
+            //   }else{
+            //     msg = y + "\n";
+            //   }
+            //   console.log(msg);
+            //   localStorage.setItem('battle_info_data',msg);
+            //   $('#battle_info').text(localStorage.getItem('battle_info_data'));
+            // }
           });
 
           // sidebar
@@ -29,13 +55,13 @@
           });
 
           function load(){
-            $('#game_status').text(localStorage.getItem('game_status_data'));
+            $('#battle_info').text(localStorage.getItem('battle_info_data'));
             // sidebar
             $('#client_is_found').text(localStorage.getItem('client_is_found_data'));
           }
       </script>
     </head>
-    <body>
+    <body onload="load()">
         <!-- the content goes here -->
         <div class="sidebar">
           <div class="logo_content">
@@ -107,12 +133,15 @@
         <div class="body_content">
           <!-- <div class="text">Battle</div> -->
           <!-- <span style="color:white;">遊戲當前狀態:</span><span style="color:white" id="game_status"></span><br> -->
-
-          <!-- 
+          <!-- <span style="color:white;">近期開發中...敬請期待...</span> -->
+          <!-- <span style="color:white;">DEBUG:</span><span style="color:white" id="battle_info"></span><br> -->
+          <!--
             左右兩邊各五個圓圈
             每個圓圈 左:右邊文字 右:左邊文字
-            
+
            -->
+           <span style="color:white;">我方召喚師資訊:</span><br>
+           <span style="color:white" id="battle_info"></span>
         </div>
 
         <!-- 讓按鈕有用吧! -->
@@ -128,21 +157,5 @@
                 window.api.send("toMain","closeapp");
           }
         </script>
-        <!-- <div class="text_status">
-            <span style="color:white;">軟體狀態</span><br>
-            <span style="color:white;">版本:</span><span style="color:white" id="software_version"></span><br>
-            <span style="color:white;">客戶端狀態:</span><span style="color:white" id="game_is_found"></span><br>
-            <span style="color:white;">現在時間1:</span><span style="color:white" id="now_time"></span><br>
-            <span style="color:white;">最後檢查的時間1:</span><span style="color:white" id="update_time"></span><br>
-            <span style="color:white;">遊戲召喚師資訊</span><br>
-            <span style="color:white;">召喚師名稱:</span><span style="color:white" id="summoner_name"></span><br>
-            <span style="color:white;">召喚師等級:</span><span style="color:white" id="summoner_level"></span><br>
-            <span style="color:white;">召喚師狀態:</span><span style="color:white" id="summoner_status"></span><br>
-            <span style="color:white;">召喚師狀態訊息:</span><span style="color:white" id="summoner_status_message"></span><br>
-            <span style="color:white;">總專精分數:</span><span style="color:white" id="summoner_masteryScore"></span><br>
-
-            <span style="color:white;">遊戲狀態</span><br>
-
-        </div> -->
     </body>
 </html>

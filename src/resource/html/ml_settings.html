@@ -46,7 +46,7 @@
             localStorage.setItem('find_refresh_data',data);
             $('#refresh_time').text(`(客戶端:${localStorage.getItem('api_refresh_data')?localStorage.getItem('api_refresh_data'):'預設'}秒/ 搜尋客戶端:${localStorage.getItem('find_refresh_data')?localStorage.getItem('find_refresh_data'):'預設'}秒)`);
           });
-          
+
           function load(){
             // 版本呼叫提取
             window.api.send("toMain","sversion");
@@ -133,7 +133,7 @@
         <!-- body: 頁面內容 -->
         <div class="body_content">
           <!-- <div class="text">Settings</div> -->
-            <span style="color:white;">全區域設定</span>
+            <span style="color:white;">設定</span>
             <div class="switch"><!-- 按鈕區 -->
               <input type="checkbox" class="accept_checkbox" id="accept_checkbox" onchange="accept_checkbox_event(this)">
               <label>自動接受對戰</label>

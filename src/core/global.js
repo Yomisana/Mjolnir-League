@@ -140,10 +140,17 @@ global.refresh_check_path_timer = { // check lol client path timer
     }
     global.battle = {
         players_num: 0, // 對戰上召喚師數量
-        myteam_num: 0, // 我方召喚師數量
         enemyteam_num: 0, // 敵方召喚師數量
         cell_id: [], // actions 對應 myTeam or theirTeam find...
-        final_data: [],
+
+        myteam_num: 0, // 我方召喚師數量
+        myteam_summoner: null,
+        myteam_summoner_puuid: null,
+        myteam_summoner_rank: null,
+        myteam_data: [],
+        myteam_sourcedata: [],
+        
+        
     }
     global.champselect = {
         histroy_msgid: null,
@@ -152,6 +159,7 @@ global.refresh_check_path_timer = { // check lol client path timer
         chat_id: 0, // 給自己檢查用的
         chat_msg: [],
         chat_msg_timestamp: [],
+        chat_msg_summoner: [],
         chat_body: []
     }
     global.postMessage = {

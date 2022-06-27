@@ -38,6 +38,7 @@ contextBridge.exposeInMainWorld(
                 "refresh_time",
                 "api_refresh",
                 "find_refresh",
+                "battle_info",
             ];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 

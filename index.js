@@ -130,7 +130,7 @@ app.whenReady().then(() => {
         frame: true,
         show: false,
         webPreferences: {
-            devTools: false,
+            devTools: true,
             fullscreenBoolean: false,
             fullscreenableBoolean: false,
             simpleFullscreenBoolean: false,
@@ -141,7 +141,7 @@ app.whenReady().then(() => {
         }
     });
 
-    ml_main.setMenu(null);
+    // ml_main.setMenu(null);
     ml_main.loadFile('src/resource/html/ml_main.html');
 
     ml_main.once('ready-to-show', () => {

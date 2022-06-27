@@ -77,6 +77,8 @@ const $ = {
     
                 url_prefix = client_lockfile.lockfile_method + "://127.0.0.1:" + client_lockfile.lockfile_port;
                 console.log("[INFO] api url:" + url_prefix);
+                console.log("Account: riot");
+                console.log("Passwd: " + lockfile[3]);
                 console.log("[INFO] LOL api url extraction done!\n");
                 game_is_notfound = false; is_lockfile_get = true;
             }catch(error){

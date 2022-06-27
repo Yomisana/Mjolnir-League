@@ -271,3 +271,18 @@ body{
   width: calc(100% - 240px);
   left: 240px;
 }
+
+
+.body_content span{
+  font-size: 150%;
+  font-weight: 500;
+  color: white;
+  margin: 12px;
+}
+
+.body_content #battle_info{
+  overflow: scroll;
+  /* white-space: pre-line; */
+  /* white-space: pre; */
+  white-space: pre-wrap;
+}

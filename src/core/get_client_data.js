@@ -149,7 +149,7 @@ const $ = {
                         // console.log("[INFO] 傳送自動接受資訊中...");
                         gameflow_ReadyCheck = true;
                         gameflow_ChampSelect = false;
-                    }else if(gameflow == "ChampSelect"){
+                    }else if(gameflow == "ChampSelect"){ // 選擇角色
                         gameflow_ReadyCheck = false;
                         if(me.lol.gameQueueType == "NORMAL"){
                             gameflow_ChampSelect = true;
@@ -168,6 +168,7 @@ const $ = {
                             ml_main.webContents.send("game_status", gameflow + " | 自訂對戰 選擇英雄腳色中");
                             
                         }else if(me.lol.gameQueueType == "ARAM_UNRANKED_5x5"){
+                            gameflow_ChampSelect = true;
                             ml_main.webContents.send("game_status", gameflow + " | 一般隨機單中 選擇英雄腳色中");
                         }else if(me.lol.gameQueueType == "NORMAL_TFT"){
                             ml_main.webContents.send("game_status", gameflow + " | 一般戰旗 選擇英雄腳色中(??)");
@@ -260,108 +261,6 @@ const $ = {
             }
         );
     },
-    select_champion_data: function(){
-        request.get({
-            // 我看 legacy 好像都不能用所以就沒有 測 legacy
-            // 所有英雄 id 1,2,3,4,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,40,41,43,44,45,48,50,51,53,54,55,56,58,59,60,63,67,74,75,76,77,78,80,81,82,83,84,85,86,89,91,92,99,101,102,103,104,106,110,117,120,121,122,126,131,134,143,145,157,166,201,202,203,222,223,235,238,240,245,246,254,267,268,350,360,412,420,427,432,498,523,526,555,711,876,887,888
-            // /lol-champ-select/v1/all-grid-champions //  列出所有單一角色的資料
-            // /lol-champ-select/v1/grid-champions/16 //  列出單一角色的資料
-            // /lol-champ-select/v1/bannable-champion-ids // 可以被banned 的角色 也就是官方上架的所有角色都可以banned
-            // /lol-champ-select/v1/pickable-champion-ids // 可以被pick   的角色 也就是官方上架的所有角色都可以pick
-            // /lol-champ-select/v1/current-champion // 鎖定後才會知道你鎖哪一隻角色 你所鎖定的英雄 id
-            // /lol-champ-select/v1/disabled-champion-ids // 已經被停用的角色(完全看不到此角色在選角畫面上) 也就是被官方下架的角色
-            // /lol-champ-select/v1/pickable-skin-ids // 感覺沒啥用 :P [11009,11011,22023,86024,21003,117005,117004,21006,117006,21007,106003,106002,267024,106004,117015,106006,21015,11033,74015,10015,223011,84005,21031,84006,21034,21035,9004,21036,21037,21038,21039,245036,126003,350001,83001,19001,19003,19004,19005,19006,19007,19008,84032,19010,51010,104005,360001,51013,8005,40006,350019,254020,19016,157003,126024,19018,157001,222029,254029,19023,19025,18002,18003,51028,222037,103001,104025,157017,104035,412005,104036,28008,17002,145001,17004,81005,157036,92018,145014,134007,92020,38005,134005,91001,59002,91003,27002,145016,81018,145017,81020,59007,145026,80001,16001,27009,16002,80005,16005,16007,16009,134025,5004,5005,37005,92044,16015,16016,26001,26002,58003,26003,58006,15001,58009,15003,15004,143007,143005,15009,58017,4004,36008,25001,121002,5036,25004,89004,25010,143025,25011,89010,78005,89012,67001,238011,3002,99003,99002,99005,3004,3005,99008,110016,120004,99015,77003,13005,24013,25039,45007,13010,2002,2003,67032,55004,44001,268005,76003,76002,76004,76007,76006,12007,1005,55021,1008,86001,246002,86003,246001,1012,1013,22005,54005,22006,75001,75003,427002,12029,11005,523001,1022]
-            // /lol-champ-select/v1/session
-
-            // 僅在 盲選 、 積分(單雙/彈性) 、 自訂 與 訓練顯示
-            url: url_prefix + '/lol-champ-select/v1/session',
-            strictSSL: false,
-            headers:{
-                'Accept': 'application/json',
-                'Authorization': client_lockfile.lockfile_token
-            }
-        },
-            function(err, httpResponse, body){
-                try{
-                    var data = JSON.parse(body);
-                    /*
-                        先從 查看 data.actions 有多少個再來推估(以actions為基準)
-                        取的召喚師人數後 再來把各個 actions 召喚師的id 對應到 myTeam or theirTeam 尋找各個召喚師的 data 資料
-                        但這裡沿生出一個問題是 你還要做判斷是去處理 所以這個是行不通的 除非反向搜尋
-
-                        從 myTeam or theirTeam 反向搜索 actions...
-                        那為什麼 直接拿到 myTeam or theirTeam 的各個召喚師資料我還要 反向搜索 actions ? 因為我們需要 actions 上的 completed(已鎖角這個判斷值) 、 isInProgress(意旨的是 配符文那個階段 就要準備啟動遊戲端了 所以來判斷你是否還在客戶端上 這個沒啥關聯 :P) 
-                     */
-                    //console.log(data);
-
-
-                    battle.players_num = data.actions[0].length; // 對戰上召喚師數量
-                    battle.myteam_num = data.myTeam.length; // 我方召喚師數量
-                    battle.enemyteam_num = data.theirTeam.length; // 敵方召喚師數量
-
-                    console.log(`對戰玩家人數(對戰召喚師人數): ${battle.players_num}`);
-                    console.log(`我方召喚師數量:${battle.myteam_num}`);
-                    console.log(`敵方召喚師數量:${battle.enemyteam_num}`);
-                    // 二維陣列(actions)
-                    for(var i = 0; i<battle.players_num; i++){
-                        battle.cell_id.push(data.actions[0][i].actorCellId);
-                        console.log(`cellID(actions):${battle.cell_id[i]}`);
-                    }
-                    // battle.cell_id.push(data.actions[0][battle.players_num].actorCellId);
-                    // console.log(`cellID(actions):${data.actions[0][battle.players_num].actorCellId}`);
-                    
-                    //console.log("[DEBUG - champion_data] " + data);
-                    // battle.player_count = data.actions[0].length;
-                    // console.log("加入對戰召喚師數量：" + battle.player_count);
-                    // console.log("選擇角色資訊:");
-                    // for(var i = 0; i < battle.player_count; i++){
-                    //     // Unit
-
-                    //     console.log(`第${i+1}位召喚師`);
-                    //     console.log("actions:");
-                    //     console.log("   資料對應ID:" + data.actions[0][i].actorCellId);
-                    //     //console.log("   Global 資料對應ID:" + battle.actions.actions.actorCellId[i]);
-                    //     console.log("   已選取選定的角色(id): " + data.actions[0][i].championId);
-                    //     console.log("   已鎖定角色?: " + data.actions[0][i].completed);
-                    //     console.log("   在Acrions第幾個資料: " + data.actions[0][i].id);
-                    //     console.log("   是盟友行動(已知 Bot:false): " + data.actions[0][i].isAllyAction);
-                    //     console.log("   是否還在客戶端上(目前知道鎖角後就會變成 false 但也有可能是所有人鎖角後才會變 false): " + data.actions[0][i].isInProgress);
-                    //     console.log("   pickTurn(未知作用): " + data.actions[0][i].pickTurn);
-                    //     console.log("   type(未知作用): " + data.actions[0][i].type);
-                    // }
-                    // console.log("actions:");
-                    // console.log("   資料對應ID:" + data.actions[0][0].actorCellId);
-                    // console.log("   已選取選定的角色(id): " + data.actions[0][0].championId);
-                    // console.log("   已鎖定角色?: " + data.actions[0][0].completed);
-                    // console.log("   在Acrions第幾個資料: " + data.actions[0][0].id);
-                    // console.log("   是盟友行動(已知 Bot:false): " + data.actions[0][0].isAllyAction);
-                    // console.log("   是否還在客戶端上(目前知道鎖角後就會變成 false 但也有可能是所有人鎖角後才會變 false): " + data.actions[0][0].isInProgress);
-                    // console.log("   pickTurn(未知作用): " + data.actions[0][0].pickTurn);
-                    // console.log("   type(未知作用): " + data.actions[0][0].type);
-
-
-
-
-                    //const actions = select_champion_data.actions[0];
-                    // console.log("選擇角色資訊:");
-                    // console.log("actions:");
-                    // console.log("   actorCellId:" + actions[0].actorCellId);
-                    // console.log("   已選取選定的角色(id): " + actions[0].championId);
-                    // console.log("   已鎖定角色?: " + actions[0].completed);
-                    // console.log("   選擇召喚師當前順位(猜測中...): " + actions[0].id);
-                    // console.log("   是盟友行動(猜測中...): " + actions[0].isAllyAction);
-                    // console.log("   是否還在客戶端上(目前知道鎖角後就會變成 false 但也有可能是所有人鎖角後才會變 false): " + actions[0].isInProgress);
-                    // console.log("   pickTurn: " + actions[0].pickTurn);
-                    // console.log("   type: " + actions[0].type);
-                    // summoner_info.xpSinceLastLevel = summoner_info_str.xpSinceLastLevel;
-                    // summoner_info.xpUntilNextLevel = summoner_info_str.xpUntilNextLevel;
-                    // ml_main.webContents.send("summoner_level", me.lol.level + `(${summoner_info.xpSinceLastLevel} / ${summoner_info.xpUntilNextLevel})`);
-                }catch (error){
-                    console.error("[ERROR - champion_data] " + error);
-                }
-            }
-        );
-    },
     select_champion_msg: function(){
         request.get({
             url: url_prefix + '/lol-chat/v1/conversations/',
@@ -391,11 +290,26 @@ const $ = {
                                     champselect.histroy_msgid = champselect.msg_id;
                                     ///console.log("陣列訊息內容量: " + champselect.chat_msg.length);
                                     //console.log("陣列訊息時間量: " + champselect.chat_msg_timestamp.length);
+                                    // 召喚師名稱
+                                    //console.log("召喚師名字提取" + url_prefix + `/lol-summoner/v1/summoners/${data}`);
+                                    request.get({
+                                        url: url_prefix + `/lol-summoner/v1/summoners/${data.lastMessage.fromSummonerId}`,
+                                        strictSSL: false,
+                                        headers:{
+                                            'Accept': 'application/json',
+                                            'Authorization': client_lockfile.lockfile_token
+                                        }
+                                    },
+                                        function(err, httpResponse, body){
+                                            var obj = JSON.parse(body);
+                                            //console.log(obj.displayName);
+                                            champselect.chat_msg_summoner.push(obj.displayName);
 
-                                    champselect.chat_body.push(`[${champselect.chat_msg_timestamp[champselect.chat_id]}] ${champselect.chat_msg[champselect.chat_id]}`);
-                                    console.log("[INFO - select champ chat room msg]" + champselect.chat_body[champselect.chat_id]);
+                                            champselect.chat_body.push(`[${champselect.chat_msg_timestamp[champselect.chat_id]}]${champselect.chat_msg_summoner[champselect.chat_id]}:${champselect.chat_msg[champselect.chat_id]}`);
+                                            console.log("[INFO - select champ chat room msg]" + champselect.chat_body[champselect.chat_id]);
+                                            champselect.chat_id = champselect.chat_id + 1 ;
+                                    });
                                     //ml_main.webContents.send("champselect_chat", champselect.chat_body); // 改到 index 
-                                    champselect.chat_id = champselect.chat_id + 1 ;
                                 }
                             }
                         }
@@ -414,9 +328,96 @@ const $ = {
         champselect.chat_msg_timestamp = [];champselect.chat_body = [];
         ml_main.webContents.send("champselect_chat", '');
     },
-    get_other_summoner_name: function(){
+    select_champion_data: function(){
+        request.get({
+            // 僅在 盲選 、 積分(單雙/彈性) 、 自訂 與 訓練顯示 (還有單中 測試用的)
+            url: url_prefix + '/lol-champ-select/v1/session',
+            strictSSL: false,
+            headers:{
+                'Accept': 'application/json',
+                'Authorization': client_lockfile.lockfile_token
+            }
+        },
+            function(err, httpResponse, body){
+                try{
+                    var data = JSON.parse(body);
+                    battle.myteam_data = [];
+                    // console.log(body);
+                    // console.log(data);
 
-    }
+                    //battle.players_num = data.actions[0].length; // 對戰上召喚師數量
+                    battle.myteam_num = data.myTeam.length; // 我方召喚師數量
+                    //battle.enemyteam_num = data.theirTeam.length; // 敵方召喚師數量
+
+                    // console.log(`對戰召喚師數量:${battle.players_num}`);
+                    console.log(`我方召喚師數量:${battle.myteam_num}`);
+                    // console.log(`敵方召喚師數量:${battle.enemyteam_num}`);
+
+                    // 我方的資料
+                    for(var i = 0; i<battle.myteam_num; i++){
+                        if(data.myTeam[i].summonerId != "0"){
+                            request.get({
+                                url: url_prefix + `/lol-summoner/v1/summoners/${data.myTeam[i].summonerId}`,
+                                strictSSL: false,
+                                headers:{
+                                    'Accept': 'application/json',
+                                    'Authorization': client_lockfile.lockfile_token
+                                }
+                            },
+                                function(err, httpResponse, body){
+                                    var obj = JSON.parse(body);
+                                    battle.myteam_summoner = obj.displayName;
+                                    battle.myteam_summoner_puuid = obj.puuid;
+                            });
+                            request.get({
+                                url: url_prefix + `/lol-ranked/v1/ranked-stats/${battle.myteam_summoner_puuid}`,
+                                strictSSL: false,
+                                headers:{
+                                    'Accept': 'application/json',
+                                    'Authorization': client_lockfile.lockfile_token
+                                }
+                            },
+                                function(err, httpResponse, body){
+                                    var obj = JSON.parse(body);
+                                    //console.log("單雙積分,彈性積分");
+                                    battle.myteam_summoner_rank = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.division}(${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.division}(${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
+                            });
+
+
+                            //console.log("擷取完召喚師名稱");
+                            // const myteam_data = `${data.myTeam[i].cellId},${data.myTeam[i].championId},${battle.myteam_summoner},${battle.myteam_summoner_rank}`;
+                            // console.log(myteam_data);
+                            // battle.myteam_data.push(myteam_data);
+
+                            // 暫時不使用 cellid 與 英雄ID
+                            // const myteam_sourcedata = battle.myteam_summoner + battle.myteam_summoner_rank;
+                            //console.log(myteam_sourcedata);
+                            battle.myteam_sourcedata.push(battle.myteam_summoner);
+                            battle.myteam_sourcedata.push(battle.myteam_summoner_rank);
+                        }else{
+                            //console.log("對戰中有電腦玩家");
+                            // const myteam_bot_data = `${data.myTeam[i].cellId},${data.myTeam[i].championId},${"電腦(機器人)"},${"單雙牌位:無"},${"分數:無"},${"勝場:無"},${"勝率:無"},${"彈性牌位:無"},${"分數:無"},${"勝場:無"},${"勝率:無"}`;
+                            // console.log(myteam_bot_data);
+                            // battle.myteam_data.push(myteam_bot_data);
+
+                            // 暫時不使用 cellid 與 英雄ID
+                            //const myteam_bot_sourcedata = `${"電腦(機器人)"},${"單雙牌位:無"}(${"無"})${"勝率:無"}|${"彈性牌位:無"}(${"無"})${"勝率:無"}`;
+                            //console.log(myteam_bot_sourcedata);
+                            // battle.myteam_sourcedata.push(myteam_bot_sourcedata);
+                            battle.myteam_sourcedata.push("電腦(機器人)");
+                            battle.myteam_sourcedata.push("單雙牌位:無段位 / 彈性牌位:無段位");
+                        }
+                    }
+                    // 傳到前端
+                    // ml_main.webContents.send("battle_info", battle.myteam_data);
+                    ml_main.webContents.send("battle_info", battle.myteam_sourcedata);
+                    battle.myteam_sourcedata = [];
+                }catch (error){
+                    console.error("[ERROR - champion_data] " + error);
+                }
+            }
+        );
+    },
 }
 
 module.exports = $;
