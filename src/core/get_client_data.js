@@ -348,8 +348,8 @@ const $ = {
                     var data = JSON.parse(body);
                     // console.log(body);
                     //console.log("我的cellid: " + data.localPlayerCellId);
-                    console.log("我方隊伍人數: " + data.myTeam.length);
-                    console.log("==============================");
+                    // console.log("我方隊伍人數: " + data.myTeam.length);
+                    // console.log("==============================");
                     for(var i = 0; i < data.myTeam.length; i++){
                         // console.log("cellid: " + data.myTeam[i].cellId + `(${data.myTeam[i].cellId + 1})`);
                         // console.log("summonerid: " + data.myTeam[i].summonerId);
@@ -362,7 +362,7 @@ const $ = {
                         // └─────────┴───┴──────────┴────────────────┘
                         // console.log(battle.myteam_arr[i][1]);
                     }
-                    console.table(battle.myteam_arr);
+                    // console.table(battle.myteam_arr);
                     $.summoner_displayname();
                     // ┌─────────┬───┬───────────┐
                     // │ (index) │ 0 │     1     │
@@ -407,7 +407,7 @@ const $ = {
                 },
                     function(err, httpResponse, body){
                         var obj = JSON.parse(body);
-                        console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
+                        // console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
                         battle.myteam_arr[i].push(obj.displayName);
                         // console.table(battle.myteam_arr)
                         request.get({
@@ -423,7 +423,7 @@ const $ = {
                                 //console.log("單雙積分,彈性積分");
                                 var rk = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.division}(${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.division}(${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
                                 battle.myteam_arr[i].push(rk);
-                                console.table(battle.myteam_arr);
+                                // console.table(battle.myteam_arr);
                             });
                 });
             }else{
