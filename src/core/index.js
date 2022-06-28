@@ -16,6 +16,9 @@ const $ = {
         console.log("度調頻率設定完成");
         ml_main.webContents.send("api_refresh", refresh_check_path_timer.open / 1000);
         ml_main.webContents.send("find_refresh", refresh_check_path_timer.close / 1000);
+    },
+    closetimer: function(){
+        check_timer.destroy();
     }
 }
 

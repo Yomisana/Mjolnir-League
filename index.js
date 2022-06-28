@@ -20,7 +20,8 @@ const $ = { // 已完成不需要變更
           process.kill(pid);
           pid = 0;
       }
-      //app.quit(); //沒有真的退出 修復 bug
+      set.closetimer(); // 遠程呼叫  關閉動態時間 (正確的關閉 避免報錯)
+      app.quit(); //沒有真的退出
       process.exit();
     },
     taskbar: async function(win){
