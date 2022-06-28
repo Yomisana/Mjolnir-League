@@ -120,6 +120,8 @@ const $ = {
         ml_main.webContents.send("game_status", "Waiting...");
         // summoner chat
         ml_main.webContents.send("champselect_chat", "");
+        // battle info 
+        ml_main.webContents.send("battle_info", "");
     }
 }
 
