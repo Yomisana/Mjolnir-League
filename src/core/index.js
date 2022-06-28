@@ -37,13 +37,15 @@ var check_timer = reInterval(function(){
                         post.matchmaking_accept();
                     }else{
                         ml_main.webContents.send("game_status", gameflow + " | 對戰已匹配等待接受中...");
-                        console.log("[INFO] 對戰已匹配等待接受中...");
+                        console.log("[INFO] 對戰已匹配等待玩家手動接受中...");
                     }
                 }
                 if(gameflow_ChampSelect){
                     get.select_champion_msg();
                     ml_main.webContents.send("champselect_chat", champselect.chat_body); // 從這邊發送的話有助於在其他頁面也可以發送資料
-                    get.select_champion_data();
+                    //get.select_champion_data();
+                    get.select_champion_datav2();
+                    ml_main.webContents.send("battle_info", battle.myteam_arr); // 從這邊發送的話有助於在其他頁面也可以發送資料
                 }
             }
         }

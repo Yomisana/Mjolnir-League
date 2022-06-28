@@ -16,12 +16,12 @@
         <!-- 本地儲存資料 -->
         <script>
           window.api.receive("battle_info", (data)=>{
-            //console.log(data.length);
+            console.log(data.length);
             var length = data.length;
             if(data){
               var msg = "";
-              for(var x = 0; x <length; x += 2 ){
-                var y = data[x] + "\n  " + data[x+1];
+              for(var x = 0; x <length; x++ ){
+                var y = data[x][2] + "\n  " + data[x][3];
                 if(x != 0){
                   msg = msg + y + "\n  ";
                 }else{
@@ -30,21 +30,10 @@
                 localStorage.setItem('battle_info_data',msg);
                 $('#battle_info').text(localStorage.getItem('battle_info_data'));
               }
+            }else{
+              localStorage.setItem('battle_info_data', "等待再次選角中...");
+              $('#battle_info').text(localStorage.getItem('battle_info_data'));
             }
-            // var msg = "";
-            // for(var x = 0; x < data.length; x += 2 ){
-            //   console.log("共" + x);
-            //   // console.log(data[x] + "\n" + data[x+1]);
-            //   var y = data[x] + "\n" + data[x+1];
-            //   if(x != 0){
-            //     msg = msg + y + "\n  ";
-            //   }else{
-            //     msg = y + "\n";
-            //   }
-            //   console.log(msg);
-            //   localStorage.setItem('battle_info_data',msg);
-            //   $('#battle_info').text(localStorage.getItem('battle_info_data'));
-            // }
           });
 
           // sidebar

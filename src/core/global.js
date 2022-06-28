@@ -139,18 +139,8 @@ global.refresh_check_path_timer = { // check lol client path timer
         xpUntilNextLevel: 0, // 升級的經驗值
     }
     global.battle = {
-        players_num: 0, // 對戰上召喚師數量
-        enemyteam_num: 0, // 敵方召喚師數量
-        cell_id: [], // actions 對應 myTeam or theirTeam find...
-
-        myteam_num: 0, // 我方召喚師數量
-        myteam_summoner: null,
-        myteam_summoner_puuid: null,
-        myteam_summoner_rank: null,
-        myteam_data: [],
-        myteam_sourcedata: [],
-        
-        
+        myteam_num: 0, // 我方玩家數量
+        myteam_arr: [], // 原始資料(未處理過的)
     }
     global.champselect = {
         histroy_msgid: null,

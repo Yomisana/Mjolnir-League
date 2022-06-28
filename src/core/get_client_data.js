@@ -77,13 +77,13 @@ const $ = {
                     gameflow = body.replace(/[^A-Z0-9]/ig,"");
                     if(gameflow == "None"){
                         gameflow_ChampSelect = false;
-                        $.clear_select_champion_msg();// chat page reset
+                        $.clear_select_champion();// chat page reset
                         ml_main.webContents.send("game_status", gameflow + " | 你目前可能在首頁或是選擇模式大廳");
                     }else if(gameflow == "Lobby"){
                         gameflow_ReadyCheck = false;
                         gameflow_ChampSelect = false;
 
-                        $.clear_select_champion_msg();// chat page reset
+                        $.clear_select_champion();// chat page reset
                         
                         if(me.lol.gameQueueType == "NORMAL"){
                             ml_main.webContents.send("game_status", gameflow + " | 一般盲選對戰房間");
@@ -115,7 +115,7 @@ const $ = {
                     }else if(gameflow == "Matchmaking"){
                         gameflow_ReadyCheck = false;
                         
-                        $.clear_select_champion_msg();// chat page reset
+                        $.clear_select_champion();// chat page reset
 
                         if(me.lol.gameQueueType == "NORMAL"){
                             ml_main.webContents.send("game_status", gameflow + " | 匹配一般盲選");
@@ -192,7 +192,7 @@ const $ = {
                     }else if(gameflow == "InProgress"){
                         gameflow_ChampSelect = false;
                         
-                        $.clear_select_champion_msg();// chat page reset
+                        $.clear_select_champion();// chat page reset
                         
                         ml_main.webContents.send("game_status", gameflow + " | 遊玩中...");
                     }else if(gameflow == "Reconnect"){
@@ -321,14 +321,19 @@ const $ = {
             }
         );
     },
-    clear_select_champion_msg: function(){
+    clear_select_champion: function(){
         // chat page reset
         champselect.histroy_msgid = null;champselect.msg_id = null;
         champselect.chat_id = 0;champselect.chat_msg = [];
         champselect.chat_msg_timestamp = [];champselect.chat_body = [];
         ml_main.webContents.send("champselect_chat", '');
+
+        // 玩家資料
+        battle.myteam_arr = [];
+        battle.myteam_num = 0;
+        ml_main.webContents.send("battle_info", '');
     },
-    select_champion_data: function(){
+    select_champion_datav2: function(){
         request.get({
             // 僅在 盲選 、 積分(單雙/彈性) 、 自訂 與 訓練顯示 (還有單中 測試用的)
             url: url_prefix + '/lol-champ-select/v1/session',
@@ -341,83 +346,124 @@ const $ = {
             function(err, httpResponse, body){
                 try{
                     var data = JSON.parse(body);
-                    battle.myteam_data = [];
                     // console.log(body);
-                    // console.log(data);
-
-                    //battle.players_num = data.actions[0].length; // 對戰上召喚師數量
-                    battle.myteam_num = data.myTeam.length; // 我方召喚師數量
-                    //battle.enemyteam_num = data.theirTeam.length; // 敵方召喚師數量
-
-                    // console.log(`對戰召喚師數量:${battle.players_num}`);
-                    console.log(`我方召喚師數量:${battle.myteam_num}`);
-                    // console.log(`敵方召喚師數量:${battle.enemyteam_num}`);
-
-                    // 我方的資料
-                    for(var i = 0; i<battle.myteam_num; i++){
-                        if(data.myTeam[i].summonerId != "0"){
-                            request.get({
-                                url: url_prefix + `/lol-summoner/v1/summoners/${data.myTeam[i].summonerId}`,
-                                strictSSL: false,
-                                headers:{
-                                    'Accept': 'application/json',
-                                    'Authorization': client_lockfile.lockfile_token
-                                }
-                            },
-                                function(err, httpResponse, body){
-                                    var obj = JSON.parse(body);
-                                    battle.myteam_summoner = obj.displayName;
-                                    battle.myteam_summoner_puuid = obj.puuid;
-                            });
-                            request.get({
-                                url: url_prefix + `/lol-ranked/v1/ranked-stats/${battle.myteam_summoner_puuid}`,
-                                strictSSL: false,
-                                headers:{
-                                    'Accept': 'application/json',
-                                    'Authorization': client_lockfile.lockfile_token
-                                }
-                            },
-                                function(err, httpResponse, body){
-                                    var obj = JSON.parse(body);
-                                    //console.log("單雙積分,彈性積分");
-                                    battle.myteam_summoner_rank = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.division}(${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.division}(${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
-                            });
-
-
-                            //console.log("擷取完召喚師名稱");
-                            // const myteam_data = `${data.myTeam[i].cellId},${data.myTeam[i].championId},${battle.myteam_summoner},${battle.myteam_summoner_rank}`;
-                            // console.log(myteam_data);
-                            // battle.myteam_data.push(myteam_data);
-
-                            // 暫時不使用 cellid 與 英雄ID
-                            // const myteam_sourcedata = battle.myteam_summoner + battle.myteam_summoner_rank;
-                            //console.log(myteam_sourcedata);
-                            battle.myteam_sourcedata.push(battle.myteam_summoner);
-                            battle.myteam_sourcedata.push(battle.myteam_summoner_rank);
-                        }else{
-                            //console.log("對戰中有電腦玩家");
-                            // const myteam_bot_data = `${data.myTeam[i].cellId},${data.myTeam[i].championId},${"電腦(機器人)"},${"單雙牌位:無"},${"分數:無"},${"勝場:無"},${"勝率:無"},${"彈性牌位:無"},${"分數:無"},${"勝場:無"},${"勝率:無"}`;
-                            // console.log(myteam_bot_data);
-                            // battle.myteam_data.push(myteam_bot_data);
-
-                            // 暫時不使用 cellid 與 英雄ID
-                            //const myteam_bot_sourcedata = `${"電腦(機器人)"},${"單雙牌位:無"}(${"無"})${"勝率:無"}|${"彈性牌位:無"}(${"無"})${"勝率:無"}`;
-                            //console.log(myteam_bot_sourcedata);
-                            // battle.myteam_sourcedata.push(myteam_bot_sourcedata);
-                            battle.myteam_sourcedata.push("電腦(機器人)");
-                            battle.myteam_sourcedata.push("單雙牌位:無段位 / 彈性牌位:無段位");
-                        }
+                    //console.log("我的cellid: " + data.localPlayerCellId);
+                    console.log("我方隊伍人數: " + data.myTeam.length);
+                    console.log("==============================");
+                    for(var i = 0; i < data.myTeam.length; i++){
+                        // console.log("cellid: " + data.myTeam[i].cellId + `(${data.myTeam[i].cellId + 1})`);
+                        // console.log("summonerid: " + data.myTeam[i].summonerId);
+                        battle.myteam_arr[i] = [data.myTeam[i].cellId , data.myTeam[i].summonerId];
+                        // battle.myteam_arr[i].push("我是測試字串");
+                        // ┌─────────┬───┬──────────┬────────────────┐
+                        // │ (index) │ 0 │    1     │       2        │
+                        // ├─────────┼───┼──────────┼────────────────┤
+                        // │    0    │ 0 │ 28183234 │ '我是測試字串'  │
+                        // └─────────┴───┴──────────┴────────────────┘
+                        // console.log(battle.myteam_arr[i][1]);
                     }
-                    // 傳到前端
-                    // ml_main.webContents.send("battle_info", battle.myteam_data);
-                    ml_main.webContents.send("battle_info", battle.myteam_sourcedata);
-                    battle.myteam_sourcedata = [];
+                    console.table(battle.myteam_arr);
+                    $.summoner_displayname();
+                    // ┌─────────┬───┬───────────┐
+                    // │ (index) │ 0 │     1     │
+                    // ├─────────┼───┼───────────┤
+                    // │    0    │ 0 │ 554237685 │
+                    // │    1    │ 1 │ 28183234  │
+                    // └─────────┴───┴───────────┘
                 }catch (error){
                     console.error("[ERROR - champion_data] " + error);
                 }
             }
         );
     },
+    summoner_displayname: function(){
+        // for(var i = 0; i<battle.myteam_arr.length; i++){
+        //     request.get({
+        //         url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
+        //         strictSSL: false,
+        //         headers:{
+        //             'Accept': 'application/json',
+        //             'Authorization': client_lockfile.lockfile_token
+        //         }
+        //     },
+        //         function(err, httpResponse, body){
+        //             var obj = JSON.parse(body);
+        //             console.log(`i: ${i} ${obj.displayName}`);
+        //     });
+        //     // console.log("var Summoner Name:" + battle.summoner_displayname);
+        //     // battle.myteam_arr[i].push(battle.summoner_displayname);
+        //     // console.table(battle.myteam_arr)
+        // }
+
+        function request_data(i){
+            if(battle.myteam_arr[i][1] != "0"){
+                request.get({
+                    url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
+                    strictSSL: false,
+                    headers:{
+                        'Accept': 'application/json',
+                        'Authorization': client_lockfile.lockfile_token
+                    }
+                },
+                    function(err, httpResponse, body){
+                        var obj = JSON.parse(body);
+                        console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
+                        battle.myteam_arr[i].push(obj.displayName);
+                        // console.table(battle.myteam_arr)
+                        request.get({
+                            url: url_prefix + `/lol-ranked/v1/ranked-stats/${obj.puuid}`,
+                            strictSSL: false,
+                            headers:{
+                                'Accept': 'application/json',
+                                'Authorization': client_lockfile.lockfile_token
+                            }
+                        },
+                            function(err, httpResponse, body){
+                                var obj = JSON.parse(body);
+                                //console.log("單雙積分,彈性積分");
+                                var rk = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.division}(${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.division}(${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
+                                battle.myteam_arr[i].push(rk);
+                                console.table(battle.myteam_arr);
+                            });
+                });
+            }else{
+                battle.myteam_arr[i].push("電腦(機器人)");
+                battle.myteam_arr[i].push("單雙牌位:無段位 / 彈性牌位:無段位");
+            }
+            // request.get({
+            //     url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
+            //     strictSSL: false,
+            //     headers:{
+            //         'Accept': 'application/json',
+            //         'Authorization': client_lockfile.lockfile_token
+            //     }
+            // },
+            //     function(err, httpResponse, body){
+            //         var obj = JSON.parse(body);
+            //         console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
+            //         battle.myteam_arr[i].push(obj.displayName);
+            //         // console.table(battle.myteam_arr)
+            //         request.get({
+            //             url: url_prefix + `/lol-ranked/v1/ranked-stats/${obj.puuid}`,
+            //             strictSSL: false,
+            //             headers:{
+            //                 'Accept': 'application/json',
+            //                 'Authorization': client_lockfile.lockfile_token
+            //             }
+            //         },
+            //             function(err, httpResponse, body){
+            //                 var obj = JSON.parse(body);
+            //                 //console.log("單雙積分,彈性積分");
+            //                 var rk = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.division}(${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.division}(${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
+            //                 battle.myteam_arr[i].push(rk);
+            //                 console.table(battle.myteam_arr);
+            //             });
+            // });
+        }
+        for(var x = 0; x < battle.myteam_arr.length; x++){
+            request_data(x);
+        }
+    }
 }
 
 module.exports = $;
