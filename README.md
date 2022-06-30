@@ -1,7 +1,7 @@
 # Mjolnir-League
 此軟體僅有Riot合法的功能 - 後面規劃將僅暫定...  
-[![Releases Download Count](https://img.shields.io/github/downloads/Yomisana/Mjolnir-League/total.svg?&style=for-the-badge&color=Green&label=Downloads)](https://github.com/Yomisana/Mjolnir-League/releases/latest)
-[![Releases version](https://img.shields.io/github/v/release/yomisana/Mjolnir-League?&style=for-the-badge&color=Green&label=releases)](https://github.com/Yomisana/Mjolnir-League/releases/latest)
+[![Releases Download Count](https://img.shields.io/github/downloads/Yomisana/Mjolnir-League/total.png?&style=for-the-badge&color=Green&label=Downloads)](https://github.com/Yomisana/Mjolnir-League/releases/latest)
+[![Releases version](https://img.shields.io/github/v/release/yomisana/Mjolnir-League.png?&style=for-the-badge&color=Green&label=releases)](https://github.com/Yomisana/Mjolnir-League/releases/latest)
 
 [![GitHub - Yomisana](https://img.shields.io/static/v1?style=for-the-badge&message=GitHub&color=181717&logo=GitHub&logoColor=FFFFFF&label=yomisana)](https://github.com/Yomisana/)
 [![GitHub - Yomisana/Mjolnir-League](https://img.shields.io/static/v1?style=for-the-badge&message=GitHub&color=181717&logo=GitHub&logoColor=FFFFFF&label=yomisana/Mjolnir-League)](https://github.com/Yomisana/Mjolnir-League)

@@ -15,7 +15,7 @@ const $ = {
         },
             function(err, httpResponse, body){
                 try{
-                    var me_str = JSON.parse(body);
+                    let me_str = JSON.parse(body);
                     me.summoner_status = me_str.availability;
                     if(me.summoner_status == "away"){
                         // 離開...
@@ -224,7 +224,7 @@ const $ = {
         },
             function(err, httpResponse, body){
                 try{
-                    var wallet_str = JSON.parse(body);
+                    let wallet_str = JSON.parse(body);
                     wallet.ip = wallet_str.ip;
                     wallet.rp = wallet_str.rp;
                     //console.log("[INFO - wallet] 藍粉: " + wallet.ip + " 聯盟幣: " + wallet.rp);
@@ -249,7 +249,7 @@ const $ = {
         },
             function(err, httpResponse, body){
                 try{
-                    var summoner_info_str = JSON.parse(body);
+                    let summoner_info_str = JSON.parse(body);
                     //console.log("[DEBUG - summoner_info] " + body);
                     summoner_info.xpSinceLastLevel = summoner_info_str.xpSinceLastLevel;
                     summoner_info.xpUntilNextLevel = summoner_info_str.xpUntilNextLevel;
@@ -272,7 +272,7 @@ const $ = {
         },
             function(err, httpResponse, body){
                 try{
-                    var obj = JSON.parse(body);
+                    let obj = JSON.parse(body);
                     for(let data of obj){
                         if(data.type == "championSelect"){
                             if(data.lastMessage == null){
@@ -284,7 +284,7 @@ const $ = {
                                     //console.log("API所取得的聊天室訊息: " + data.lastMessage.body); // msg
                                     champselect.chat_msg.push(data.lastMessage.body);
 
-                                    var date = new Date(data.lastMessage.timestamp); // timestamp
+                                    let date = new Date(data.lastMessage.timestamp); // timestamp
                                     champselect.chat_msg_timestamp.push(date.toLocaleString());
 
                                     champselect.histroy_msgid = champselect.msg_id;
@@ -301,7 +301,7 @@ const $ = {
                                         }
                                     },
                                         function(err, httpResponse, body){
-                                            var obj = JSON.parse(body);
+                                            let obj = JSON.parse(body);
                                             //console.log(obj.displayName);
                                             champselect.chat_msg_summoner.push(obj.displayName);
 
@@ -333,6 +333,7 @@ const $ = {
         battle.myteam_num = 0;
         ml_main.webContents.send("battle_info", '');
     },
+    // let mode
     select_champion_datav2: function(){
         request.get({
             // 僅在 盲選 、 積分(單雙/彈性) 、 自訂 與 訓練顯示 (還有單中 測試用的)
@@ -345,15 +346,15 @@ const $ = {
         },
             function(err, httpResponse, body){
                 try{
-                    var data = JSON.parse(body);
+                    let data = JSON.parse(body);
                     // console.log(body);
                     //console.log("我的cellid: " + data.localPlayerCellId);
                     // console.log("我方隊伍人數: " + data.myTeam.length);
                     // console.log("==============================");
-                    for(var i = 0; i < data.myTeam.length; i++){
+                    for(let i = 0; i < data.myTeam.length; i++){
                         // console.log("cellid: " + data.myTeam[i].cellId + `(${data.myTeam[i].cellId + 1})`);
-                        // console.log("summonerid: " + data.myTeam[i].summonerId);
-                        battle.myteam_arr[i] = [data.myTeam[i].cellId , data.myTeam[i].summonerId];
+                        // console.log("summonerid: " + data.myTeam[i].summonerId);                    
+                        battle.myteam_arr[i] = [data.myTeam[i].cellId , data.myTeam[i].summonerId , data.myTeam[i].championId];
                         // battle.myteam_arr[i].push("我是測試字串");
                         // ┌─────────┬───┬──────────┬────────────────┐
                         // │ (index) │ 0 │    1     │       2        │
@@ -364,12 +365,12 @@ const $ = {
                     }
                     // console.table(battle.myteam_arr);
                     $.summoner_displayname();
-                    // ┌─────────┬───┬───────────┐
-                    // │ (index) │ 0 │     1     │
-                    // ├─────────┼───┼───────────┤
-                    // │    0    │ 0 │ 554237685 │
-                    // │    1    │ 1 │ 28183234  │
-                    // └─────────┴───┴───────────┘
+                    // ┌─────────┬───┬───────────┬───────┐
+                    // │ (index) │ 0 │     1     │   2   │
+                    // ├─────────┼───┼───────────┼───────┤
+                    // │    0    │ 0 │ 554237685 │ 16    │
+                    // │    1    │ 1 │ 28183234  │ 145   │
+                    // └─────────┴───┴───────────┴───────┘
                 }catch (error){
                     console.error("[ERROR - champion_data] " + error);
                 }
@@ -406,7 +407,7 @@ const $ = {
                     }
                 },
                     function(err, httpResponse, body){
-                        var obj = JSON.parse(body);
+                        let obj = JSON.parse(body);
                         // console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
                         battle.myteam_arr[i].push(obj.displayName);
                         // console.table(battle.myteam_arr)
@@ -419,11 +420,11 @@ const $ = {
                             }
                         },
                             function(err, httpResponse, body){
-                                var obj = JSON.parse(body);
+                                let obj = JSON.parse(body);
                                 //console.log("單雙積分,彈性積分");
-                                var rk = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.tier}(${obj.queueMap.RANKED_SOLO_5x5.division}:${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.tier}(${obj.queueMap.RANKED_FLEX_SR.division}:${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
+                                let rk = `單雙:${obj.queueMap.RANKED_SOLO_5x5.tier}(${obj.queueMap.RANKED_SOLO_5x5.division}:${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% | 彈性:${obj.queueMap.RANKED_FLEX_SR.tier}(${obj.queueMap.RANKED_FLEX_SR.division}:${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
                                 battle.myteam_arr[i].push(rk);
-                                // console.table(battle.myteam_arr);
+                                console.table(battle.myteam_arr);
                             });
                 });
             }else{
@@ -460,7 +461,7 @@ const $ = {
             //             });
             // });
         }
-        for(var x = 0; x < battle.myteam_arr.length; x++){
+        for(let x = 0; x < battle.myteam_arr.length; x++){
             request_data(x);
         }
     }

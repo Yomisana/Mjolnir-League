@@ -17,11 +17,11 @@
         <script>
           window.api.receive("battle_info", (data)=>{
             console.log(data.length);
-            var length = data.length;
+            let length = data.length;
             if(data){
-              var msg = "";
-              for(var x = 0; x <length; x++ ){
-                var y = data[x][2] + "\n  " + data[x][3];
+              let msg = "";
+              for(let x = 0; x <length; x++ ){
+                let y = data[x][3] + "\n  " + data[x][4];
                 if(x != 0){
                   msg = msg + y + "\n  ";
                 }else{

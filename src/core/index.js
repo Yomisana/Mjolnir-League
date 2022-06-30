@@ -5,7 +5,7 @@ const check = require('./client');
 const get = require('./get_client_data');
 const post = require('./post_client_data');
 
-var reInterval = require('reinterval');
+const reInterval = require('reinterval');
 
 const $ = {
     refresh_time: function(){
@@ -22,7 +22,8 @@ const $ = {
     }
 }
 
-var check_timer = reInterval(function(){
+let check_timer = reInterval(function(){
+    console.log("Tik Tok Tik Tok This is reinterval timer loop");
     if(client_is_found){
         //ml_main.webContents.send("client_is_found", client_status[1]);
         check_timer.reschedule(refresh_check_path_timer.open);

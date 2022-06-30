@@ -67,8 +67,8 @@ const $ = {
                 //lockfile.lockfile_token = lockfile[3];
                 client_lockfile.lockfile_method = lockfile[4];
                 // Token 解密
-                var tmp_token = "riot:" + lockfile[3];
-                var encode_token = base64.encode(tmp_token);
+                let tmp_token = "riot:" + lockfile[3];
+                let encode_token = base64.encode(tmp_token);
                 client_lockfile.lockfile_token = "Basic " + encode_token
                 // console.log("[INFO] Token:" + client_lockfile.lockfile_token);
     

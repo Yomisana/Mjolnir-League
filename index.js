@@ -339,7 +339,7 @@ autoUpdater.on('checking-for-update', () => {
     console.warn('[WARN] Error in auto-updater. ' + err);
     ml_splash.webContents.send('update_status','Update error');
     //Error in auto-updater. HttpError: 500
-    var reg = RegExp(/HttpError: 500/);
+    let reg = RegExp(/HttpError: 500/);
     if(reg.exec(err)){
       $.showMessage(lh_splash,"Updater Error 500 - Github have some issue\n Tips: This time Update is skip.","error", software_name + " - Updater error");
     }
@@ -347,7 +347,7 @@ autoUpdater.on('checking-for-update', () => {
   })
 
   autoUpdater.on('download-progress', (progressObj) => {
-    var percent = progressObj.percent.toFixed(0);
+    let percent = progressObj.percent.toFixed(0);
     console.log('[INFO] Download progress:' + percent + '%');
     ml_splash.webContents.send('update_status','Downloading... '+ percent + '%');
     ml_splash.webContents.send('update_percent',percent);
