@@ -18,7 +18,9 @@ const $ = {
         ml_main.webContents.send("find_refresh", refresh_check_path_timer.close / 1000);
     },
     closetimer: function(){
+        console.log("關閉動態時間");
         check_timer.destroy();
+        console.log("關閉動態時間完畢");
     }
 }
 

@@ -360,8 +360,5 @@ autoUpdater.on('checking-for-update', () => {
 
   // 更新檔下載完畢後 過 x 秒 關閉軟體更新後重啟軟體
   autoUpdater.on('update-downloaded', (ev, info) => {
-    setTimeout(function() {
-        //$.closeApp();
-        autoUpdater.quitAndInstall();
-    }, 3000)
+    autoUpdater.quitAndInstall(false, true); // isSilent: false, isForceRunAfter: true
   })
