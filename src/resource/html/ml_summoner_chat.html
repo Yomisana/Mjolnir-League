@@ -15,20 +15,13 @@
         <!-- 本地儲存資料 -->
         <script>
           window.api.receive("champselect_chat", (data)=>{
-            //console.log(data.length);
-            // var data = localStorage.getItem('champselect_chat_data');
-            // const msg_data = data.split(',');
-            // $('#champselect_chat').text(msg_data[0] + "\n");data.length
-
-            // localStorage.setItem('champselect_chat_data',msg_data);
-            // $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));
             if(data){
               for (i = 0; i< data.length; i++) {
-                let x =  data[i];
+                var x =  data[i];
                 if(i != 0){
-                  let msg = msg + x + "\n  ";
+                  var msg = msg + x + "\n  ";
                 }else{
-                  let msg = x + "\n  ";
+                  var msg = x + "\n  ";
                 }
                 localStorage.setItem('champselect_chat_data',msg);
                 $('#champselect_chat').text(localStorage.getItem('champselect_chat_data'));

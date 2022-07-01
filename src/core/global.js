@@ -152,13 +152,6 @@ global.refresh_check_path_timer = { // check lol client path timer
         chat_msg_summoner: [],
         chat_body: []
     }
-    global.postMessage = {
-                // 0     1    2    3     4    5      6    7      8      9     10     11
-        message: ["top","jg","ap","ad","sup","mid","adc","上路","打野","中路","下路","輔助"],
-        times: 2,
-        is_system_chat: false,
-        type: ["celebration","chat"]
-    }
 
 // Logger
 global.nowtimes = function(flags){
