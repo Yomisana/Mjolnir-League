@@ -138,10 +138,6 @@ global.refresh_check_path_timer = { // check lol client path timer
         xpSinceLastLevel: 0, // 當前經驗值
         xpUntilNextLevel: 0, // 升級的經驗值
     }
-    global.battle = {
-        myteam_num: 0, // 我方玩家數量
-        myteam_arr: [], // 原始資料(未處理過的)
-    }
     global.champselect = {
         histroy_msgid: null,
         msg_id: null,
@@ -152,6 +148,16 @@ global.refresh_check_path_timer = { // check lol client path timer
         chat_msg_summoner: [],
         chat_body: []
     }
+    global.battle = {
+        session: false, // 是否抓到session資料了?
+        displayname: false, // 是否抓到 召喚師顯示名稱
+        rank: false, // 是否抓到召喚師積分資料了?
+        championName: false,
+        championData: false,
+        myteam_num: 0, // 我方玩家數量
+        myteam_arr: [], // 原始資料(未處理過的)
+    }
+
 
 // Logger
 global.nowtimes = function(flags){

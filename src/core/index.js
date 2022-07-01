@@ -50,8 +50,42 @@ let check_timer = reInterval(function(){
                     get.select_champion_msg();
                     ml_main.webContents.send("champselect_chat", champselect.chat_body); // 從這邊發送的話有助於在其他頁面也可以發送資料
                     // get.select_champion_data();
-                    // get.select_champion_datav2();
-                    // ml_main.webContents.send("battle_info", battle.myteam_arr); // 從這邊發送的話有助於在其他頁面也可以發送資料
+                    // console.log("check point(session):" + battle.session);
+                    // console.table(battle.myteam_arr);
+                    if(battle.session){
+                        //get.select_champion_data_();
+                        // console.log("前往下一個工作點(DisplayName)");
+                        // console.table(battle.myteam_arr);
+                        if(battle.displayname){
+                            // console.log("前往下一個工作點(Rank)");
+                            // console.table(battle.myteam_arr);
+                            if(battle.rank){
+                                if(battle.championName){
+                                    // console.log("前往下一個工作點(championData)");
+                                    // console.table(battle.myteam_arr);
+                                    if(battle.championData){
+                                        console.log("Done!");
+                                        ml_main.webContents.send("battle_info", battle.myteam_arr); // 從這邊發送的話有助於在其他頁面也可以發送資料
+                                        // console.table(battle.myteam_arr);
+                                        // ml_main.webContents.send("battle_info", battle.myteam_arr); // 從這邊發送的話有助於在其他頁面也可以發送資料
+                                        battle.session = false;battle.displayname = false;battle.rank = false;
+                                        battle.championName = false;battle.championData = false;
+                                        battle.myteam_arr = [];battle.myteam_num = 0;
+                                    }else{
+                                        get.select_champion_data_championData();
+                                    }
+                                }else{
+                                    get.select_champion_data_championName();
+                                }
+                            }else{
+                                get.select_champion_data_rank();
+                            }
+                        }else{
+                            get.select_champion_data_displayname();
+                        }
+                    }else{
+                        get.select_champion_data_session();
+                    }
                 }
             }
         }

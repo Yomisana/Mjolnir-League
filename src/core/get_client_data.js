@@ -329,12 +329,13 @@ const $ = {
         ml_main.webContents.send("champselect_chat", '');
 
         // 玩家資料
+        battle.session = false;battle.displayname = false;battle.rank = false;
+        battle.championName = false;battle.championData = false;
         battle.myteam_arr = [];
         battle.myteam_num = 0;
         ml_main.webContents.send("battle_info", '');
     },
-    // let mode
-    select_champion_datav2: function(){
+    select_champion_data_session: function(){
         request.get({
             // 僅在 盲選 、 積分(單雙/彈性) 、 自訂 與 訓練顯示 (還有單中 測試用的)
             url: url_prefix + '/lol-champ-select/v1/session',
@@ -347,24 +348,18 @@ const $ = {
             function(err, httpResponse, body){
                 try{
                     let data = JSON.parse(body);
-                    // console.log(body);
-                    //console.log("我的cellid: " + data.localPlayerCellId);
-                    // console.log("我方隊伍人數: " + data.myTeam.length);
-                    // console.log("==============================");
-                    for(let i = 0; i < data.myTeam.length; i++){
-                        // console.log("cellid: " + data.myTeam[i].cellId + `(${data.myTeam[i].cellId + 1})`);
-                        // console.log("summonerid: " + data.myTeam[i].summonerId);                    
+                    battle.myteam_num = data.myTeam.length;
+                    for(let i = 0; i < battle.myteam_num; i++){                  
                         battle.myteam_arr[i] = [data.myTeam[i].cellId , data.myTeam[i].summonerId , data.myTeam[i].championId];
-                        // battle.myteam_arr[i].push("我是測試字串");
-                        // ┌─────────┬───┬──────────┬────────────────┐
-                        // │ (index) │ 0 │    1     │       2        │
-                        // ├─────────┼───┼──────────┼────────────────┤
-                        // │    0    │ 0 │ 28183234 │ '我是測試字串'  │
-                        // └─────────┴───┴──────────┴────────────────┘
-                        // console.log(battle.myteam_arr[i][1]);
+                        // console.log(`i:${i} | myteam_length:${battle.myteam_num}`);
+                        if(i+1 == battle.myteam_num){
+                            // console.log(`i(loop):${i+1} | myteam_length:${battle.myteam_num}`);
+                            // console.log("最後一個跑完囉!");
+                            battle.session = true;
+                            // console.table(battle.myteam_arr);
+                        }
                     }
-                    // console.table(battle.myteam_arr);
-                    $.summoner_displayname();
+                    //$.summoner_displayname();
                     // ┌─────────┬───┬───────────┬───────┐
                     // │ (index) │ 0 │     1     │   2   │
                     // ├─────────┼───┼───────────┼───────┤
@@ -377,92 +372,153 @@ const $ = {
             }
         );
     },
-    summoner_displayname: function(){
-        // for(var i = 0; i<battle.myteam_arr.length; i++){
-        //     request.get({
-        //         url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
-        //         strictSSL: false,
-        //         headers:{
-        //             'Accept': 'application/json',
-        //             'Authorization': client_lockfile.lockfile_token
-        //         }
-        //     },
-        //         function(err, httpResponse, body){
-        //             var obj = JSON.parse(body);
-        //             console.log(`i: ${i} ${obj.displayName}`);
-        //     });
-        //     // console.log("var Summoner Name:" + battle.summoner_displayname);
-        //     // battle.myteam_arr[i].push(battle.summoner_displayname);
-        //     // console.table(battle.myteam_arr)
-        // }
-
+    select_champion_data_displayname: function(){
         function request_data(i){
-            if(battle.myteam_arr[i][1] != "0"){
-                request.get({
-                    url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
-                    strictSSL: false,
-                    headers:{
-                        'Accept': 'application/json',
-                        'Authorization': client_lockfile.lockfile_token
-                    }
-                },
-                    function(err, httpResponse, body){
-                        let obj = JSON.parse(body);
-                        // console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
+            request.get({
+                url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
+                strictSSL: false,
+                headers:{
+                    'Accept': 'application/json',
+                    'Authorization': client_lockfile.lockfile_token
+                }
+            },
+            function(err, httpResponse, body){
+                try{
+                    let obj = JSON.parse(body);
+                    if(obj.message != "No summoner name for id 0"){
                         battle.myteam_arr[i].push(obj.displayName);
-                        // console.table(battle.myteam_arr)
-                        request.get({
-                            url: url_prefix + `/lol-ranked/v1/ranked-stats/${obj.puuid}`,
-                            strictSSL: false,
-                            headers:{
-                                'Accept': 'application/json',
-                                'Authorization': client_lockfile.lockfile_token
-                            }
-                        },
-                            function(err, httpResponse, body){
-                                let obj = JSON.parse(body);
-                                //console.log("單雙積分,彈性積分");
-                                let rk = `單雙:${obj.queueMap.RANKED_SOLO_5x5.tier}(${obj.queueMap.RANKED_SOLO_5x5.division}:${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% | 彈性:${obj.queueMap.RANKED_FLEX_SR.tier}(${obj.queueMap.RANKED_FLEX_SR.division}:${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
-                                battle.myteam_arr[i].push(rk);
-                                console.table(battle.myteam_arr);
-                            });
-                });
-            }else{
-                battle.myteam_arr[i].push("電腦(機器人)");
-                battle.myteam_arr[i].push("單雙牌位:無段位 / 彈性牌位:無段位");
-            }
-            // request.get({
-            //     url: url_prefix + `/lol-summoner/v1/summoners/${battle.myteam_arr[i][1]}`,
-            //     strictSSL: false,
-            //     headers:{
-            //         'Accept': 'application/json',
-            //         'Authorization': client_lockfile.lockfile_token
-            //     }
-            // },
-            //     function(err, httpResponse, body){
-            //         var obj = JSON.parse(body);
-            //         console.log(`i: ${i} ${obj.displayName} ${obj.puuid}`);
-            //         battle.myteam_arr[i].push(obj.displayName);
-            //         // console.table(battle.myteam_arr)
-            //         request.get({
-            //             url: url_prefix + `/lol-ranked/v1/ranked-stats/${obj.puuid}`,
-            //             strictSSL: false,
-            //             headers:{
-            //                 'Accept': 'application/json',
-            //                 'Authorization': client_lockfile.lockfile_token
-            //             }
-            //         },
-            //             function(err, httpResponse, body){
-            //                 var obj = JSON.parse(body);
-            //                 //console.log("單雙積分,彈性積分");
-            //                 var rk = `單雙牌位:${obj.queueMap.RANKED_SOLO_5x5.division}(${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% / 彈性牌位:${obj.queueMap.RANKED_FLEX_SR.division}(${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
-            //                 battle.myteam_arr[i].push(rk);
-            //                 console.table(battle.myteam_arr);
-            //             });
-            // });
+                        battle.myteam_arr[i].push(obj.puuid);
+                        // console.table(battle.myteam_arr);
+                    }else{    
+                        battle.myteam_arr[i].push("電腦(機器人)");
+                        battle.myteam_arr[i].push("puuid");
+                        // console.table(battle.myteam_arr);
+                    }
+                }catch (error){
+                    console.error("[ERROR - champion_data] " + error);
+                }
+            });
         }
-        for(let x = 0; x < battle.myteam_arr.length; x++){
+        for(let x = 0; x < battle.myteam_num; x++){
             request_data(x);
+            if(x+1 == battle.myteam_num){
+                battle.displayname = true;
+                // console.table(battle.myteam_arr);
+            }
+        }
+    },
+    select_champion_data_rank: function(){
+        function request_data(i){
+            request.get({
+                url: url_prefix + `/lol-ranked/v1/ranked-stats/${battle.myteam_arr[i][4]}`,
+                strictSSL: false,
+                headers:{
+                    'Accept': 'application/json',
+                    'Authorization': client_lockfile.lockfile_token
+                }
+            },
+            function(err, httpResponse, body){
+                try{
+                    let obj = JSON.parse(body);
+                    if(battle.myteam_arr[i][4] != "puuid"){
+                        let rk = `單雙:${obj.queueMap.RANKED_SOLO_5x5.tier}(${obj.queueMap.RANKED_SOLO_5x5.division}:${obj.queueMap.RANKED_SOLO_5x5.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_SOLO_5x5.wins / (obj.queueMap.RANKED_SOLO_5x5.wins + obj.queueMap.RANKED_SOLO_5x5.losses))* 100)}% | 彈性:${obj.queueMap.RANKED_FLEX_SR.tier}(${obj.queueMap.RANKED_FLEX_SR.division}:${obj.queueMap.RANKED_FLEX_SR.leaguePoints})勝率:${Math.round((obj.queueMap.RANKED_FLEX_SR.wins / (obj.queueMap.RANKED_FLEX_SR.wins + obj.queueMap.RANKED_FLEX_SR.losses)) * 100)}%`;
+                        battle.myteam_arr[i].push(rk);
+                        // console.table(battle.myteam_arr);
+                    }else{    
+                        battle.myteam_arr[i].push("單雙牌位:無段位 / 彈性牌位:無段位");
+                        // console.table(battle.myteam_arr);
+                    }
+                }catch (error){
+                    console.error("[ERROR - champion_data] " + error);
+                }
+            });
+        }
+        for(let y = 0; y < battle.myteam_num; y++){
+            request_data(y);
+            if(y+1 == battle.myteam_num){
+                battle.rank = true;
+                // console.table(battle.myteam_arr);
+            }
+        }
+    },
+    select_champion_data_championName: function(){
+        function request_data(i){
+            request.get({
+                url: url_prefix + `/lol-champions/v1/inventories/${battle.myteam_arr[i][1]}/champions/${battle.myteam_arr[i][2]}`,
+                strictSSL: false,
+                headers:{
+                    'Accept': 'application/json',
+                    'Authorization': client_lockfile.lockfile_token
+                }
+            },
+            function(err, httpResponse, body){
+                try {
+                    let obj = JSON.parse(body);
+                    if(obj.message != "Champion data does not yet exist."){
+                        if(battle.myteam_arr[i][2] != 0){
+                            battle.myteam_arr[i].push(obj.name);
+                        }else{
+                            battle.myteam_arr[i].push("尚未選角過...");
+                        }
+                    }else{    
+                        battle.myteam_arr[i].push("Champion_data_not_exist");
+                    }     
+                }catch (error) {
+                    console.error("[ERROR - champion_data] " + error);
+                }
+            });
+        }
+        for(let z = 0; z < battle.myteam_num; z++){
+            request_data(z);
+            if(z+1 == battle.myteam_num){
+                battle.championName = true;
+            }
+        }
+    },
+    select_champion_data_championData: function(){
+        function request_data(i){
+            request.get({
+                url: url_prefix + `/lol-collections/v1/inventories/${battle.myteam_arr[i][1]}/champion-mastery`,
+                strictSSL: false,
+                headers:{
+                    'Accept': 'application/json',
+                    'Authorization': client_lockfile.lockfile_token
+                }
+            },
+            function(err, httpResponse, body){
+                try {
+                    let obj = JSON.parse(body);
+                    if(obj.message != "0 is an invalid summonerId."){
+                        if(battle.myteam_arr[i][6] != "Champion_data_not_exist"){
+                            for(let xz = 0; xz < obj.length; xz++){
+                                if(obj[xz].championId == battle.myteam_arr[i][2]){
+                                    let xdate = new Date(obj[xz].lastPlayTime); // timestamp
+                                    battle.myteam_arr[i].push(`專:${obj[xz].championLevel}`);
+                                    battle.myteam_arr[i].push(`專精分數:${obj[xz].formattedChampionPoints}(${obj[xz].championPointsSinceLastLevel}/${obj[xz].championPointsUntilNextLevel})`);
+                                    battle.myteam_arr[i].push(`專精碎片: ${obj[xz].tokensEarned}`);
+                                    battle.myteam_arr[i].push(`拿過專精寶箱:${obj[xz].chestGranted}`);
+                                    battle.myteam_arr[i].push(`歷史評分: ${obj[xz].highestGrade}`);
+                                    battle.myteam_arr[i].push(`最後遊玩: ${xdate.toLocaleString()}`);
+                                }
+                            }
+                        }else{
+                            battle.myteam_arr[i].push("champion-mastery");
+                        }
+                    }else{    
+                        battle.myteam_arr[i].push("champion-mastery");
+                        // console.table(battle.myteam_arr);
+                    }
+                }catch (error) {
+                    console.error("[ERROR - champion_data] " + error);
+                }
+            });
+        }
+        for(let xy = 0; xy < battle.myteam_num; xy++){
+            request_data(xy);
+            if(xy+1 == battle.myteam_num){
+                battle.championData = true;
+                // console.table(battle.myteam_arr);
+            }
         }
     }
 }
