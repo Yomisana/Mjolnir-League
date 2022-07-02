@@ -64,7 +64,7 @@ let check_timer = reInterval(function(){
                                     // console.log("前往下一個工作點(championData)");
                                     // console.table(battle.myteam_arr);
                                     if(battle.championData){
-                                        console.log("Done!");
+                                        // console.log("Done!");
                                         ml_main.webContents.send("battle_info", battle.myteam_arr); // 從這邊發送的話有助於在其他頁面也可以發送資料
                                         // console.table(battle.myteam_arr);
                                         // ml_main.webContents.send("battle_info", battle.myteam_arr); // 從這邊發送的話有助於在其他頁面也可以發送資料
