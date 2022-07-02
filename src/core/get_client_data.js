@@ -493,7 +493,7 @@ const $ = {
                             for(let xz = 0; xz < obj.length; xz++){
                                 if(obj[xz].championId == battle.myteam_arr[i][2]){
                                     let xdate = new Date(obj[xz].lastPlayTime); // timestamp
-                                    battle.myteam_arr[i].push(`專:${obj[xz].championLevel}`);
+                                    battle.myteam_arr[i].push(`專${obj[xz].championLevel}`);
                                     battle.myteam_arr[i].push(`專精分數:${obj[xz].formattedChampionPoints}(${obj[xz].championPointsSinceLastLevel}/${obj[xz].championPointsUntilNextLevel})`);
                                     battle.myteam_arr[i].push(`專精碎片: ${obj[xz].tokensEarned}`);
                                     battle.myteam_arr[i].push(`拿過專精寶箱:${obj[xz].chestGranted}`);
@@ -501,13 +501,24 @@ const $ = {
                                     battle.myteam_arr[i].push(`最後遊玩: ${xdate.toLocaleString()}`);
                                 }
                             }
-                        }else{
-                            battle.myteam_arr[i].push("champion-mastery");
                         }
-                    }else{    
-                        battle.myteam_arr[i].push("champion-mastery");
-                        // console.table(battle.myteam_arr);
                     }
+
+                //     else{
+                //         battle.myteam_arr[i].push(`champion-mastery`);
+                //         battle.myteam_arr[i].push(`champion-mastery`);
+                //         battle.myteam_arr[i].push(`champion-mastery`);
+                //         battle.myteam_arr[i].push(`champion-mastery`);
+                //         battle.myteam_arr[i].push(`champion-mastery`);
+                //         battle.myteam_arr[i].push(`champion-mastery`);
+                //     }
+                // }else{
+                //     battle.myteam_arr[i].push(`champion-mastery`);
+                //     battle.myteam_arr[i].push(`champion-mastery`);
+                //     battle.myteam_arr[i].push(`champion-mastery`);
+                //     battle.myteam_arr[i].push(`champion-mastery`);
+                //     battle.myteam_arr[i].push(`champion-mastery`);
+                //     battle.myteam_arr[i].push(`champion-mastery`);
                 }catch (error) {
                     console.error("[ERROR - champion_data] " + error);
                 }
