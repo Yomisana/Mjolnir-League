@@ -36,26 +36,26 @@
                     console.log(`${data[x][3]}:${data[x][6]} ${data[x][7]}${data[x][8]}${data[x][9]}${data[x][10]}${data[x][11]}${data[x][12]}${"\n  "}${data[x][5]}`);
                     var xy1 = `${data[x][3]}:${data[x][6]} ${data[x][7]} ${data[x][8]}${"\n  "}${data[x][9]}${"  "}${data[x][10]}${"  "}${data[x][11]}${"\n  "}${data[x][12]}${"\n  "}${data[x][5]}`;
                     if(x != 0){
-                      msg = msg + xy1 + "\n  ";
+                      msg = msg + xy1 + "\n  \n";
                     }else{
-                      msg = xy1 + "\n  ";
+                      msg = xy1 + "\n  \n";
                     }
                   }else{
                     console.log(`${data[x][3]}:尚未選角過... ${"\n  "}${data[x][5]}`);
                     var z1 = `${data[x][3]}:尚未選角過... ${"\n  "}${data[x][5]}`;
                     if(x != 0){
-                      msg = msg + z1 + "\n  ";
+                      msg = msg + z1 + "\n  \n";
                     }else{
-                      msg = z1 + "\n  ";
+                      msg = z1 + "\n  \n";
                     }
                   }
                 }else{
                   console.log(`${data[x][3]}:無法取得資料... ${"\n  "}${data[x][5]}`);
-                  var y1 = `${data[x][3]}:無法取得資料... ${"\n  "}${data[x][5]}`;
+                  var y1 = `${data[x][3]} ${"\n  "}${data[x][5]}`;
                   if(x != 0){
-                    msg = msg + y1 + "\n  ";
+                    msg = msg + y1 + "\n  \n";
                   }else{
-                    msg = y1 + "\n  ";
+                    msg = y1 + "\n  \n";
                   }
                 }
                 localStorage.setItem('battle_info_data', msg);
@@ -193,7 +193,7 @@
             每個圓圈 左:右邊文字 右:左邊文字
 
            -->
-           <span style="color:white;">我方召喚師資訊:</span><br>
+           <!-- <span style="color:white;">我方召喚師資訊:</span><br> -->
            <span style="color:white" id="battle_info"></span>
         </div>
 

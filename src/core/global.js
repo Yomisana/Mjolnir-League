@@ -32,12 +32,11 @@ global.log_dir = process.env.APPDATA + '\\.Mjolnir-League\\logger';
         }
     global.ml_main = null;
         global.main_set = {
-            width: 816,
-            height: 489,
+            // 800 525 600
+            width: 816, // 816
+            height: 639, // 489
             min_width: 816,
-            min_height: 489,
-            max_width: 816,
-            max_height: 489,
+            min_height: 639,
             // general
             title: software_name
         }
