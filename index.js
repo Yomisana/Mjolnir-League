@@ -10,6 +10,7 @@ const {autoUpdater} = require("electron-updater");
 const exec = require('child_process').exec;
 const fs = require('fs-extra');
 const path = require('path');
+const fsutil = require("nodejs-fs-utils");
 
 // 區域宣告
 let isQuiting;
@@ -47,6 +48,15 @@ const $ = { // 已完成不需要變更
             type: 'separator'
           },
           {
+            label: `Clean log (${logstorage.storage} ${logstorage.type})`, click: function () {
+              $.cleanlog();
+              console.log(`[INFO] 已經清除了 ${logstorage.storage} ${logstorage.type} 記錄檔了`);
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
             label: 'Quit Mjolnir League', click: function () {
               $.closeApp();
             }
@@ -56,7 +66,42 @@ const $ = { // 已完成不需要變更
         taskbar_tray.setToolTip(`Mjolnir League`);
         taskbar_tray.setContextMenu(contextMenu);
 
-        taskbar_tray.on('click', () => {
+        taskbar_tray.on('click', async ()=>{
+          await $.calculatestorage();
+          const contextMenu = Menu.buildFromTemplate([
+            {
+              icon: path.join(__dirname,'./src/resource/img/ml-logo-taskbar.png'), // 16 {右鍵後裡面的}
+              label: `Mjolnir League Cleaner v.${version}`,
+              enabled: false
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Github', click: function () {
+                shell.openExternal("https://github.com/yomisana");
+                shell.openExternal("https://github.com/Yomisana/Mjolnir-LeagueCleaner");
+              }
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: `Clean log (${logstorage.storage} ${logstorage.type})`, click: function () {
+                $.cleanlog();
+                console.log(`[INFO] 已經清除了 ${logstorage.storage} ${logstorage.type} 記錄檔了`);
+              }
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Quit Mjolnir League Cleaner', click: function () {
+                $.closeApp();
+              }
+            }
+          ]);
+          taskbar_tray.setContextMenu(contextMenu);
           win.show();
         });
     },
@@ -65,6 +110,81 @@ const $ = { // 已完成不需要變更
           message: message,
           type: type,
           title: title
+      });
+    },
+    calculatestorage:function(){
+        return new Promise((resolve,reject)=>{
+          fsutil.fsize(path.join(log_dir), {
+            countFolders: false
+          }, function (err, size) {
+              logstorage.storage = null; logstorage.type = "null";
+              // console.log(size); // bytes : 1024 bytes = 1KB
+              logstorage.storage = (size / 1024).toFixed();
+              logstorage.type = "KB";
+              if(logstorage.storage >= 1024){ // 1024 KB
+                let kbtomb = logstorage.storage
+                logstorage.storage = (kbtomb / 1024).toFixed();
+                logstorage.type = "MB";
+                if(logstorage.storage >= 1024){ // 1024 KB
+                  let mbtogb = logstorage.storage
+                  logstorage.storage = (mbtogb / 1024).toFixed();
+                  logstorage.type = "GB";
+                }
+              }
+              // console.log(`${(size / 1024).toFixed()}`);
+              console.log(`log folder size: ${logstorage.storage} ${logstorage.type}`);
+              resolve(true);
+          });
+        });
+    },
+    cleanlog: function(){
+      fs.readdir(path.join(log_dir), async (err, files) => {
+        if (err) {
+          console.error("[ERROR - Clean log] "+err);
+        }
+        for (const file of files) {
+          fs.unlink(path.join(log_dir, file), err => {
+            if (err) {
+              console.error("[ERROR - Ready Clean log] "+err);
+            }
+          });
+        }
+        // update tray contextMenu
+        await $.calculatestorage();
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            icon: path.join(__dirname,'./src/resource/img/ml-logo-taskbar.png'), // 16 {右鍵後裡面的}
+            label: `Mjolnir League Cleaner v.${version}`,
+            enabled: false
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Github', click: function () {
+              shell.openExternal("https://github.com/yomisana");
+              shell.openExternal("https://github.com/Yomisana/Mjolnir-LeagueCleaner");
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: `Clean log (${logstorage.storage} ${logstorage.type})`, click: function () {
+              $.cleanlog();
+              console.log(`[INFO] 已經清除了 ${logstorage.storage} ${logstorage.type} 記錄檔了`);
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Quit Mjolnir League Cleaner', click: function () {
+              $.closeApp();
+            }
+          }
+        ]);
+        taskbar_tray.setContextMenu(contextMenu);
       });
     }
 }
@@ -145,11 +265,12 @@ app.whenReady().then(() => {
     ml_main.setMenu(null);
     ml_main.loadFile('src/resource/html/ml_main.html');
 
-    ml_main.once('ready-to-show', () => {
+    ml_main.once('ready-to-show', async () => {
         console.log("[INFO] 版本: ", software_version);
         console.log(`[INFO] 主畫面渲染完畢`);
         mainWindowReady = true;
-        $.taskbar(ml_main);
+        await $.calculatestorage();
+        $.taskbar(ml_main); 
     });
 
     // 主畫面最小化時
